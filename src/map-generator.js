@@ -1,0 +1,1 @@
+../../vaoc-map-generator/dist/bundle.js
