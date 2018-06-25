@@ -49,6 +49,7 @@
   "dependencies": {
     "@types/pixi.js": "^4.7.5",
     "keycode": "^2.2.0",
+    "pixi-layers": "^0.1.9",
     "pixi.js": "^4.8.0",
     "vaoc-map-generator": "git+https://github.com/Airyworks/vaoc-map-generator.git"
   },
