@@ -17,6 +17,7 @@
     "no-consecutive-blank-lines": false,
     "no-console": false,
     "no-reference": false,
+    "no-var-requires": false,
     "semicolon": [true, "never"]
   }
 }
