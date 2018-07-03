@@ -96,6 +96,9 @@ export class FSM {
   }
 
   public async gotoState(state: string) {
+    if (!this.states[state]) {
+      throw new InvalidStateError(`Invalid state: ${state}`)
+    }
     const next = this.states[state]
     const prev = this.currentState
     await FSM.emitStateHook(prev, 'onLeave', prev, next)
@@ -110,6 +113,9 @@ export class FSM {
   }
 
   private async transTo(state: string) {
+    if (!this.states[state]) {
+      throw new InvalidStateError(`Invalid state: ${state}`)
+    }
     const next = this.states[state]
     const prev = this.currentState
     await FSM.emitStateHook(prev, 'onLeave', prev, next)
@@ -125,15 +131,6 @@ export class InvalidStateError extends Error {
   constructor(msg: string) {
     super()
     this.name = 'InvalidStateError'
-    this.message = msg
-  }
-}
-
-// tslint:disable-next-line
-export class DuplicateTransitionError extends Error {
-  constructor(msg: string) {
-    super()
-    this.name = 'DuplicateTransitionError'
     this.message = msg
   }
 }

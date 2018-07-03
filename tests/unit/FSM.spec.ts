@@ -90,13 +90,13 @@ describe('FSM', () => {
         },
         events: {
           async onLeave(ev?: string, last?: string, next?: string) { await new Promise<void>((res) => {
-            (this as any).store.varA ++
+            states.a.store.varA ++
             res()
           }) }
         },
         transitions: {
           toA(input: string) {
-            (this as any).store.varA --
+            states.a.store.varA --
             return 'a'
           }
         }
