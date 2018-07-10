@@ -6,7 +6,9 @@ export class Entity implements IMoveable {
   constructor() {
     this.displayObject = {
       object: new PIXI.Sprite(),
-      zIndex: 5
+      zIndex: 5,
+      x: 0,
+      y: 0
     }
   }
 

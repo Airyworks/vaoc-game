@@ -50,9 +50,9 @@
     "@types/event-emitter": "^0.3.2",
     "@types/pixi.js": "^4.7.5",
     "event-emitter": "^0.3.5",
-    "keycode": "^2.2.0",
     "pixi-layers": "^0.1.9",
     "pixi.js": "^4.8.0",
+    "ts-key-enum": "^2.0.0",
     "vaoc-map-generator": "git+https://github.com/Airyworks/vaoc-map-generator.git"
   },
   "engines": {

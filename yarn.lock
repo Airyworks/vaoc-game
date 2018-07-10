@@ -17,11 +17,11 @@
     js-tokens "^3.0.0"
 
 "@babel/runtime@^7.0.0-beta.49":
-  version "7.0.0-beta.51"
-  resolved "http://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.0.0-beta.51.tgz#48b8ed18307034c6620f643514650ca2ccc0165a"
+  version "7.0.0-beta.52"
+  resolved "http://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.0.0-beta.52.tgz#3f3b42b82b92b4e1a283fc78df1bb2fd4ba8d0c7"
   dependencies:
     core-js "^2.5.7"
-    regenerator-runtime "^0.11.1"
+    regenerator-runtime "^0.12.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -4582,10 +4582,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-keycode@^2.2.0:
-  version "2.2.0"
-  resolved "http://registry.npm.taobao.org/keycode/download/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
-
 keyv@3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/keyv/download/keyv-3.0.0.tgz#44923ba39e68b12a7cec7df6c3268c031f2ef373"
@@ -6420,9 +6416,13 @@ regenerate@^1.2.1:
   version "1.4.0"
   resolved "http://registry.npm.taobao.org/regenerate/download/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
 
-regenerator-runtime@^0.11.0, regenerator-runtime@^0.11.1:
+regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "http://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+
+regenerator-runtime@^0.12.0:
+  version "0.12.0"
+  resolved "http://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.12.0.tgz#8052ac952d85b10f3425192cd0c53f45cf65c6cb"
 
 regenerator-transform@^0.10.0:
   version "0.10.1"
@@ -7413,6 +7413,10 @@ ts-jest@^22.4.6:
     source-map-support "^0.5.5"
     yargs "^11.0.0"
 
+ts-key-enum@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/ts-key-enum/download/ts-key-enum-2.0.0.tgz#35c98f0bc2c733fffe4225c4febe039b05f1c686"
+
 ts-loader@^4.3.0:
   version "4.3.0"
   resolved "http://registry.npm.taobao.org/ts-loader/download/ts-loader-4.3.0.tgz#4e3ba172783d1256d3a23bdfadde011a795fae9e"
@@ -7689,7 +7693,7 @@ validate-npm-package-license@^3.0.1:
 
 "vaoc-map-generator@git+https://github.com/Airyworks/vaoc-map-generator.git":
   version "1.0.0"
-  resolved "git+https://github.com/Airyworks/vaoc-map-generator.git#6709931d3c74d049c8fc93fefef34f5cf2ba42be"
+  resolved "git+https://github.com/Airyworks/vaoc-map-generator.git#333d685b4b8b889ea7bcf68bb6a01b15554de17c"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.49"
     seedrandom "^2.4.3"
