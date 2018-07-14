@@ -1,5 +1,4 @@
 import { Game } from './game'
-import * as MapGenerator from 'vaoc-map-generator'
 import 'pixi-layers'
 
 const appContainer: HTMLDivElement = document.getElementById('app') as HTMLDivElement

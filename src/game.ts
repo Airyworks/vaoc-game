@@ -28,6 +28,8 @@ export class Game {
 
   private async init() {
     this.app.stage = new PIXI.display.Stage()
+    const stage = this.app.stage as any
+    stage.group.enableSort = true
 
     const m1 = require('@/asset/image/m1.png')
     const m2 = require('@/asset/image/m2.png')
@@ -65,8 +67,6 @@ export class Game {
 
     this.app.stage.addChild(containerA)
     this.app.stage.addChild(containerB)
-    const stage = this.app.stage as any
-    stage.group.enableSort = true
 
     const LayerA = new PIXI.display.Layer(groupA)
     const LayerB = new PIXI.display.Layer(groupB)

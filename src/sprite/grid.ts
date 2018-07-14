@@ -5,7 +5,9 @@ export class Grid implements ISprite {
   constructor() {
     this.displayObject = {
       object: new PIXI.Sprite(),
-      zIndex: 0
+      zIndex: 0,
+      x: 0,
+      y: 0
     }
   }
 

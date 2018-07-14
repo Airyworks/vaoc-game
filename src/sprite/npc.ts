@@ -8,7 +8,9 @@ export class NPC implements ICharactor {
   constructor() {
     this.displayObject = {
       object: new PIXI.Sprite(),
-      zIndex: 5
+      zIndex: 5,
+      x: 0,
+      y: 0
     }
   }
 
