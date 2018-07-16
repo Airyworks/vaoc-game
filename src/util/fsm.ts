@@ -81,7 +81,7 @@ export class FSM {
       this.pendingState = true
       return new Promise<void>((s, j) => {
         Promise.resolve(nextStateName).then((name) => {
-          this.transTo(name).then(() => {
+          this._transTo(name).then(() => {
             this.pendingState = false
             s()
           })
@@ -112,7 +112,7 @@ export class FSM {
     return this
   }
 
-  private async transTo(state: string) {
+  private async _transTo(state: string) {
     if (!this.states[state]) {
       throw new InvalidStateError(`Invalid state: ${state}`)
     }

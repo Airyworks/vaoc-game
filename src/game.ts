@@ -1,6 +1,9 @@
 /// <reference path="./util/import.d.ts" />
 import * as PIXI from 'pixi.js'
 import loader from './util/loader'
+import { player } from './component'
+import { input } from './input'
+import { Veb3 } from 'vaoc-veb3'
 
 export class Game {
   public readonly app: PIXI.Application
@@ -27,6 +30,11 @@ export class Game {
   }
 
   private async init() {
+    const p = player
+
+    // const v = new Veb3()
+    // await v.createNewMahouShoujo()
+
     this.app.stage = new PIXI.display.Stage()
     const stage = this.app.stage as any
     stage.group.enableSort = true

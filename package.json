@@ -53,7 +53,8 @@
     "pixi-layers": "^0.1.9",
     "pixi.js": "^4.8.0",
     "ts-key-enum": "^2.0.0",
-    "vaoc-map-generator": "git+https://github.com/Airyworks/vaoc-map-generator.git"
+    "vaoc-map-generator": "git+https://github.com/Airyworks/vaoc-map-generator.git",
+    "vaoc-veb3": "git+https://github.com/Airyworks/vaoc-veb3.git"
   },
   "engines": {
     "node": ">= 6.0.0",

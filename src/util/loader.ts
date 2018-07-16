@@ -68,4 +68,7 @@ export default new (class Loader {
     return new PIXI.Sprite(src.texture)
   }
 
+  // public loadGesture(file: string): Promise<any> {
+
+  // }
 })()

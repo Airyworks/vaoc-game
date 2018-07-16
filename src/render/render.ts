@@ -11,4 +11,5 @@ export class Render {
   public addTicker(loop: (delta: number) => void) {
     this.ticker.add(loop)
   }
+
 }
