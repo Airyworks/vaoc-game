@@ -57,5 +57,6 @@ export class Ground {
         playerPos.x > Constant.CHUNK_SIDE - MAX_WIDTH_GRID) {
       // load grids in southeast
     }
+    return []
   }
 }
