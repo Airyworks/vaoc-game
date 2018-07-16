@@ -1,4 +1,4 @@
-import { ISprite } from 'src/sprite/sprite'
+import { ISprite } from '../sprite/sprite'
 import * as PIXI from 'pixi.js'
 type ZOrderType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 

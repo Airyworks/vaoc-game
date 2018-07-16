@@ -1,19 +1,19 @@
 export type KeyEventType = 'keydown' | 'keyup'
 
 export const input = new class Input {
-  public onElement(
+  public onElement<T extends EventListener>(
     target: EventTarget,
     event: string,
-    handler: EventListener,
+    handler: T,
     options?: boolean | AddEventListenerOptions
   ): void {
     target.addEventListener(event, handler, options)
   }
 
-  public onceElement(
+  public onceElement<T extends EventListener>(
     target: EventTarget,
     event: string,
-    handler: EventListener,
+    handler: T,
     options?: boolean | AddEventListenerOptions
   ): void {
     if (typeof options === 'boolean') {
@@ -39,17 +39,17 @@ export const input = new class Input {
     target.once(event, handler)
   }
 
-  public onKeyBoard(
+  public onKeyBoard<T extends EventListener>(
     event: KeyEventType,
-    handler: EventListener,
+    handler: T,
     options?: boolean | AddEventListenerOptions
   ): void {
     this.onElement(document, event, handler, options)
   }
 
-  public onceKeyBoard(
+  public onceKeyBoard<T extends EventListener>(
     event: KeyEventType,
-    handler: EventListener,
+    handler: T,
     options?: boolean | AddEventListenerOptions
   ): void {
     this.onceElement(document, event, handler, options)
