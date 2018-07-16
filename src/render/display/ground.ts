@@ -1,4 +1,4 @@
-import { IPosition, Grid as GridSprite } from '../../sprite'
+import { IPosition, Grid as GridSprite, Directions } from '../../sprite'
 import { player, map } from '../../component'
 
 import { Constant } from 'vaoc-map-generator'
@@ -13,23 +13,68 @@ const MAX_WIDTH_GRID =
 const MAX_HEIGHT_GRID =
   ( Config.STAGE_HEIGHT - Config.RESERVE_HEIGHT ) / 2 / Config.GRID_HEIGHT + 2
 
-type IShownChunk = Array<{
-    direction: 'center' | 'left' | 'right' | 'top' | 'bottom' | 'lefttop' | 'righttop' | 'leftbottom' | 'rightbottom',
-    chunkId: number,
-    leftTop: IPosition,
-    leftBottom: IPosition,
-    rightTop: IPosition,
-    rightBottom: IPosition
-}>
+interface IChunkScope {
+  leftTop: IPosition,
+  leftBottom: IPosition,
+  rightTop: IPosition,
+  rightBottom: IPosition
+}
+
+type DIRECTIONS = 'center' | 'left' | 'right' | 'top' | 'bottom' | 'lefttop' | 'righttop' | 'leftbottom' | 'rightbottom'
+
+type ShownChunk = Array<{
+    direction: DIRECTIONS,
+    chunkId: number
+} & IChunkScope>
 
 export class Ground {
-  private static getShownGrid(): IShownChunk {
+  private static getShownGrid(): ShownChunk {
+    const ret: ShownChunk = []
     const chunkPos = map.chunkPos
     const playerPos = player.position
 
+    const leftTop: IPosition = { x: playerPos.x, y: playerPos.y}
 
-    // load chunks in current chunk
+    function findChunkId(pos: IPosition): number {
+      return map.world.position[pos.x][pos.y].id
+    }
 
+    // function getLoadedGrids(direction: DIRECTIONS): IChunkScope {
+    //   if (direction === 'center') {
+
+    //   } else
+    //   if (direction === 'left') {
+
+    //   } else
+    //   if (direction === 'right') {
+
+    //   } else
+    //   if (direction === 'top') {
+
+    //   } else
+    //   if (direction === 'bottom') {
+
+    //   } else
+    //   if (direction === 'lefttop') {
+
+    //   } else
+    //   if (direction === 'righttop') {
+
+    //   } else
+    //   if (direction === 'leftbottom') {
+
+    //   } else
+    //   if (direction === 'rightbottom') {
+
+    //   }
+    // }
+
+    // // load chunks in current chunk
+    // ret.push({
+    //   direction: 'center',
+    //   chunkId: findChunkId(chunkPos),
+    //   leftTop: 
+    // })
 
     if (playerPos.x < MAX_WIDTH_GRID) {
       // load grids in west chunk
@@ -57,5 +102,7 @@ export class Ground {
         playerPos.x > Constant.CHUNK_SIDE - MAX_WIDTH_GRID) {
       // load grids in southeast
     }
+    return []
   }
+
 }

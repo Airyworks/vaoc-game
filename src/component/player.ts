@@ -2,7 +2,7 @@ import { Player as PlayerSprite, Directions, IPosition } from '../sprite'
 import { input } from '../input'
 import { PLAYER_SPEED } from '../config'
 
-export class Player implements IPosition {
+export const player = new class Player implements IPosition {
   // position in chunk
   public x: number = 0
   public y: number = 0
@@ -29,7 +29,7 @@ export class Player implements IPosition {
     this.target = pos
   }
 
-  public move(direct: Directions) {
+  public move() {
     
   }
 
@@ -64,6 +64,4 @@ export class Player implements IPosition {
     const y = this.sprite.displayObject.y
     return {x, y}
   }
-}
-
-export const player = new Player(new PlayerSprite())
+}(new PlayerSprite())
