@@ -41,6 +41,7 @@ export class Game {
 
     const m1 = require('@/asset/image/m1.png')
     const m2 = require('@/asset/image/m2.png')
+    const m3 = '/static/assets/kuro-sprite.json'
 
     const containerA = new PIXI.Container()
     const containerB = new PIXI.Container()
@@ -49,27 +50,35 @@ export class Game {
     console.log(groupA, groupB)
 
     const sprites = await loader.load([m1, m2])
+    const kuroSprites = await loader.load([m3])
+    console.log(kuroSprites[m3], PIXI.Texture.fromFrame('KURO-D-1.png'))
+    console.log(sprites[m3], sprites[m3 + '_image'])
 
-    const sp1: PIXI.Sprite = sprites[m1]
-    const sp1s = []
-    const sp2s = []
-    for (let i = 0; i < 10; i++) {
-      sp1s[i] = loader.copyTexture(sp1)
-      sp1s[i].position.set(i * 20, i * 10)
-      sp1s[i].scale.set(0.2, 0.2)
-      sp1s[i].zOrder = -i
-      containerA.addChild(sp1s[i])
-      sp1s[i].parentGroup = groupA
-    }
-    const sp2: PIXI.Sprite = sprites[m2]
-    for (let i = 0; i < 10; i++) {
-      sp2s[i] = loader.copyTexture(sp2)
-      sp2s[i].position.set((i + 10) * 18,  200 - i * 12)
-      sp2s[i].scale.set(0.2, 0.2)
-      sp2s[i].zOrder = i
-      containerB.addChild(sp2s[i])
-      sp2s[i].parentGroup = groupB
-    }
+    // const sp1: PIXI.Sprite = sprites[m1]
+    // const sp1s = []
+    // const sp2s = []
+    // for (let i = 0; i < 10; i++) {
+    //   sp1s[i] = loader.copyTexture(sp1)
+    //   sp1s[i].position.set(i * 20, i * 10)
+    //   sp1s[i].scale.set(0.2, 0.2)
+    //   sp1s[i].zOrder = -i
+    //   containerA.addChild(sp1s[i])
+    //   sp1s[i].parentGroup = groupA
+    // }
+    // const sp2: PIXI.Sprite = sprites[m2]
+    // for (let i = 0; i < 10; i++) {
+    //   sp2s[i] = loader.copyTexture(sp2)
+    //   sp2s[i].position.set((i + 10) * 18,  200 - i * 12)
+    //   sp2s[i].scale.set(0.2, 0.2)
+    //   sp2s[i].zOrder = i
+    //   containerB.addChild(sp2s[i])
+    //   sp2s[i].parentGroup = groupB
+    // }
+
+    const sp3s = []
+    // for (let i = 0; i < 11; i++) {
+    //   console.log(PIXI.loader.resources['KURO-D-1.png'])
+    // }
 
     containerA.position.set(60, 60)
 
