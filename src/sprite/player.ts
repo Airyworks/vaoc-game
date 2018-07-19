@@ -1,5 +1,6 @@
 import { ICharactor } from './character'
-import { IDisplayObject } from './sprite'
+import { IDisplayObject, Directions } from './sprite'
+import { bus } from '../bus'
 export class Player implements ICharactor {
   public readonly type: string = 'player'
   public name: string = ''
@@ -14,11 +15,43 @@ export class Player implements ICharactor {
     }
   }
 
-  public loop(): void {
+  // tslint:disable-next-line
+  protected _direction: Directions = Directions.down
+  public get direction() { return this._direction }
+  public set direction(v) {
+    // direction changes
+    if (this._direction !== v) {
+      // do sth
+      this._direction = v
+    }
+  }
+
+  public render(delta: number): void {
     // pass
   }
 
-  public render(): void {
-    // pass
+  protected _moveDirections(distance: number, direction: Directions) {
+    if (direction === Directions.right) {
+      this.displayObject.x += distance
+      return
+    }
+    if (direction === Directions.left) {
+      this.displayObject.x -= distance
+      return
+    }
+    if (direction === Directions.up) {
+      this.displayObject.y += distance
+      return
+    }
+    if (direction === Directions.down) {
+      this.displayObject.y -= distance
+      return
+    }
+  }
+
+  protected _register() {
+    bus.on('onPlayerMove', (dis: number, dir: Directions) => {
+      this._moveDirections(dis, dir)
+    })
   }
 }

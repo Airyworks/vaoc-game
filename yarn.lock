@@ -52,7 +52,11 @@
   version "22.2.3"
   resolved "http://registry.npm.taobao.org/@types/jest/download/@types/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
 
-"@types/pixi.js@^4.5.3", "@types/pixi.js@^4.7.1", "@types/pixi.js@^4.7.5":
+"@types/koa-compose@^3.2.2":
+  version "3.2.2"
+  resolved "http://registry.npm.taobao.org/@types/koa-compose/download/@types/koa-compose-3.2.2.tgz#dc106e000bbf92a3ac900f756df47344887ee847"
+
+"@types/pixi.js@^4.7.1", "@types/pixi.js@^4.7.5":
   version "4.8.0"
   resolved "http://registry.npm.taobao.org/@types/pixi.js/download/@types/pixi.js-4.8.0.tgz#961056751780046fe5da2166669a0f1e964a7b92"
 
@@ -3659,11 +3663,7 @@ icss-utils@^2.1.0:
   dependencies:
     postcss "^6.0.1"
 
-ieee754@^1.1.11:
-  version "1.1.12"
-  resolved "http://registry.npm.taobao.org/ieee754/download/ieee754-1.1.12.tgz#50bf24e5b9c8bb98af4964c941cdb0918da7b60b"
-
-ieee754@^1.1.4:
+ieee754@^1.1.11, ieee754@^1.1.4:
   version "1.1.12"
   resolved "http://registry.npm.taobao.org/ieee754/download/ieee754-1.1.12.tgz#50bf24e5b9c8bb98af4964c941cdb0918da7b60b"
 
@@ -3818,11 +3818,7 @@ is-builtin-module@^1.0.0:
   dependencies:
     builtin-modules "^1.0.0"
 
-is-callable@^1.1.1:
-  version "1.1.4"
-  resolved "http://registry.npm.taobao.org/is-callable/download/is-callable-1.1.4.tgz#1e1adf219e1eeb684d691f9d6a05ff0d30a24d75"
-
-is-callable@^1.1.3:
+is-callable@^1.1.1, is-callable@^1.1.3:
   version "1.1.4"
   resolved "http://registry.npm.taobao.org/is-callable/download/is-callable-1.1.4.tgz#1e1adf219e1eeb684d691f9d6a05ff0d30a24d75"
 
@@ -5619,12 +5615,6 @@ pixi-layers@^0.1.9:
   resolved "http://registry.npm.taobao.org/pixi-layers/download/pixi-layers-0.1.9.tgz#6ce9cf80ab2916620dd3dbaec7b71153c533a466"
   dependencies:
     "@types/pixi.js" "^4.7.1"
-
-pixi-spine@^1.5.16:
-  version "1.5.16"
-  resolved "http://registry.npm.taobao.org/pixi-spine/download/pixi-spine-1.5.16.tgz#d024a603b815035be9f23fac480d4de32f159571"
-  dependencies:
-    "@types/pixi.js" "^4.5.3"
 
 pixi.js@^4.8.0:
   version "4.8.1"
@@ -7607,11 +7597,7 @@ uuid@2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-2.0.1.tgz#c2a30dedb3e535d72ccf82e343941a50ba8533ac"
 
-uuid@^3.0.1:
-  version "3.3.2"
-  resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
-
-uuid@^3.1.0:
+uuid@^3.0.1, uuid@^3.1.0:
   version "3.3.2"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 

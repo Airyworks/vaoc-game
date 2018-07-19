@@ -11,7 +11,7 @@ export class Grid implements ISprite {
     }
   }
 
-  public render(): void {
+  public render(delta: number): void {
     // pass
   }
 }

@@ -1,18 +1,25 @@
 /// <reference path="./util/import.d.ts" />
 import * as PIXI from 'pixi.js'
 import loader from './util/loader'
-import { player } from './component'
-import { input } from './input'
-import { Veb3 } from 'vaoc-veb3'
+import { Player } from './component'
+import { Render } from './render/render'
+import { Ground } from './render/display/ground';
 
 export class Game {
   public readonly app: PIXI.Application
+  public player: Player
+  public ground: Ground
+  public renderer: Render
 
   constructor(container: HTMLDivElement, width: number, height: number, property?: object) {
     const prop = Object.assign({ width, height, autoStart: false }, property)
     this.app = new PIXI.Application(prop)
     this.app.stage = new PIXI.display.Stage()
     container.appendChild(this.app.view)
+
+    this.renderer = new Render(this.app)
+    this.player = new Player(this.renderer)
+    this.ground = new Ground(this.renderer)
   }
 
   public start() {
@@ -30,8 +37,6 @@ export class Game {
   }
 
   private async init() {
-    const p = player
-
     // const v = new Veb3()
     // await v.createNewMahouShoujo()
 

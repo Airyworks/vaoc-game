@@ -1,10 +1,11 @@
 import { IPosition, Grid as GridSprite, Directions } from '../../sprite'
-import { player, map } from '../../component'
-
+import { Player, map } from '../../component'
 import { Constant } from 'vaoc-map-generator'
 const CHUNK_SIDE = Constant.CHUNK_SIDE
 
 import * as Config from '../../config'
+import { bus } from '../../bus'
+import { Render } from '../render'
 
 // 单边长是 (stage - reserve)/2, 但是保证渲染连续性设置为 (stage - reserve)/2 + 2
 // see vaoc-render-model.png
@@ -28,10 +29,10 @@ type ShownChunk = Array<{
 } & IChunkScope>
 
 export class Ground {
-  private static getShownGrid(): ShownChunk {
+  private static getShownGrid(player: Player): ShownChunk {
     const ret: ShownChunk = []
     const chunkPos = map.chunkPos
-    const playerPos = player.position
+    const playerPos = player.absolutePosition
 
     const leftTop: IPosition = { x: playerPos.x, y: playerPos.y}
 
@@ -105,4 +106,26 @@ export class Ground {
     return []
   }
 
+  public gridsContainer = new PIXI.Container()
+  public renderer: Render
+
+  constructor(render: Render) {
+    this.renderer = render
+    this._register()
+  }
+
+  public render(delta: number) {
+    
+  }
+
+  protected _register() {
+    this.renderer.addTicker((delta: number) => {this.render(delta)})
+
+    bus.on('onGroundMove', (distance: number, direction: Directions) => {
+      // NOTICE: direction is player's direction, not ground's
+      if (direction === Directions.left) {
+        // this.gridsContainer.x -= distance
+      }
+    })
+  }
 }
