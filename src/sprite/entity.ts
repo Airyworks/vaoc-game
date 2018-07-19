@@ -1,6 +1,5 @@
-import { IMoveable } from './moveable'
-import { IDisplayObject } from './sprite'
-export class Entity implements IMoveable {
+import { IDisplayObject, ISprite } from './sprite'
+export class Entity implements ISprite {
   public displayObject: IDisplayObject
 
   constructor() {
@@ -12,11 +11,7 @@ export class Entity implements IMoveable {
     }
   }
 
-  public render(): void {
-    // pass
-  }
-
-  public loop(): void {
+  public render(delta: number): void {
     // pass
   }
 }

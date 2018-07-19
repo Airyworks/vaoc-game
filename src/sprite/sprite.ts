@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 
 export interface ISprite {
   displayObject: IDisplayObject,
-  render(): void
+  render: (delta: number) => void
 }
 
 export interface IPosition {
@@ -13,4 +13,11 @@ export interface IPosition {
 export interface IDisplayObject extends IPosition {
   object: PIXI.DisplayObject,
   zIndex: number
+}
+
+export enum Directions {
+  up = 0,
+  down,
+  left,
+  right
 }

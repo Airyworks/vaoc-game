@@ -14,11 +14,7 @@ export class NPC implements ICharactor {
     }
   }
 
-  public loop(): void {
-    // pass
-  }
-
-  public render(): void {
+  public render(delta: number): void {
     // pass
   }
 }

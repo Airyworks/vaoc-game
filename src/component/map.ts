@@ -3,8 +3,9 @@ import { minusArr } from '../util'
 import * as PIXI from 'pixi.js'
 
 import { Constant, world, Chunk } from 'vaoc-map-generator'
+import { bus } from '../bus'
 
-export class Map {
+export const map = new class Map {
   public container: PIXI.Container = new PIXI.Container()
   public textures: { [key: string]: PIXI.Texture } = {}
   public world = world
@@ -42,6 +43,10 @@ export class Map {
       this._chunkId = this.world.position[value.x][value.y].id
       this._updateChunk()
     }
+  }
+
+  constructor() {
+    this._register()
   }
 
   public init(initHash: string[]) {
@@ -90,6 +95,16 @@ export class Map {
     })
   }
 
-}
+  protected _register() {
+    bus.on('onMove', (chunkPos: IPosition) => {
+      if (chunkPos.x !== this._chunkPos.x ||
+          chunkPos.y !== this._chunkPos.y) {
+          bus.emit('onChunkChange', this._chunkPos, chunkPos)
+        }
+    })
+    bus.on('onChunkChange', (oldPos: IPosition, newPos: IPosition) => {
+      this.chunkPos = newPos
+    })
+  }
 
-export const map = new Map()
+}()
