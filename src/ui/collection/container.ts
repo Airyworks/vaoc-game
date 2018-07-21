@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js'
 import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
+import { kernel } from '../../kernel'
 
 interface ITexture {
   [propName: string]: PIXI.Texture
@@ -179,8 +180,8 @@ export class Collection extends PIXI.Container {
     drawBtn.on('pointerdown', () => {
         drawBtn.texture = this.store['collection-draw-focus.png']
       }).on('pointerup', () => {
-        // route go -1
         drawBtn.texture = this.store['collection-draw.png']
+        kernel.emit('drawCardStart', {})
       }).on('pointerupoutside', () => {
         // route go -1
         drawBtn.texture = this.store['collection-draw.png']
