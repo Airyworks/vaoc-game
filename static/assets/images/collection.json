@@ -1,18 +1,10 @@
 {
 	"meta": {
 		"image": "/static/assets/images/collection.png",
-		"size": {"w":966,"h":654},
+		"size": {"w":966,"h":854},
 		"scale": "1"
 	},
 	"frames": {
-		"collection-background.png":
-		{
-			"frame": {"x":2,"y":2,"w":800,"h":600},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":800,"h":600},
-			"sourceSize": {"w":800,"h":600}
-		},
 		"collection-hr.png":
 		{
 			"frame": {"x":2,"y":606,"w":728,"h":46},
@@ -20,6 +12,14 @@
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":728,"h":46},
 			"sourceSize": {"w":728,"h":46}
+		},
+		"collection-background.png":
+		{
+			"frame": {"x":2,"y":2,"w":800,"h":600},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":800,"h":600},
+			"sourceSize": {"w":800,"h":600}
 		},
 		"collection-card-shadow.png":
 		{
@@ -37,29 +37,141 @@
 			"spriteSourceSize": {"x":0,"y":0,"w":146,"h":196},
 			"sourceSize": {"w":146,"h":196}
 		},
-		"collection-down.png":
+		"collection-card-front-1.png":
 		{
-			"frame": {"x":806,"y":414,"w":66,"h":26},
+			"frame": {"x":806,"y":414,"w":146,"h":196},
 			"rotated": false,
 			"trimmed": false,
-			"spriteSourceSize": {"x":0,"y":0,"w":66,"h":26},
-			"sourceSize": {"w":66,"h":26}
+			"spriteSourceSize": {"x":0,"y":0,"w":146,"h":196},
+			"sourceSize": {"w":146,"h":196}
+		},
+		"collection-card-front.png":
+		{
+			"frame": {"x":2,"y":656,"w":146,"h":196},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":146,"h":196},
+			"sourceSize": {"w":146,"h":196}
+		},
+		"collection-card-demo.png":
+		{
+			"frame": {"x":152,"y":656,"w":118,"h":118},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":118,"h":118},
+			"sourceSize": {"w":118,"h":118}
 		},
 		"collection-up.png":
 		{
-			"frame": {"x":876,"y":414,"w":66,"h":26},
+			"frame": {"x":806,"y":614,"w":66,"h":26},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":66,"h":26},
 			"sourceSize": {"w":66,"h":26}
 		},
+		"collection-down.png":
+		{
+			"frame": {"x":876,"y":614,"w":66,"h":26},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":66,"h":26},
+			"sourceSize": {"w":66,"h":26}
+		},
+		"collection-icon.png":
+		{
+			"frame": {"x":274,"y":656,"w":63,"h":49},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":63,"h":49},
+			"sourceSize": {"w":63,"h":49}
+		},
 		"collection-back.png":
 		{
-			"frame": {"x":806,"y":444,"w":40,"h":30},
+			"frame": {"x":737,"y":656,"w":40,"h":30},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":30},
 			"sourceSize": {"w":40,"h":30}
+		},
+		"collection-card-soi.png":
+		{
+			"frame": {"x":341,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-spa.png":
+		{
+			"frame": {"x":385,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-tim.png":
+		{
+			"frame": {"x":429,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-wat.png":
+		{
+			"frame": {"x":473,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-lig.png":
+		{
+			"frame": {"x":517,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-fir.png":
+		{
+			"frame": {"x":561,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-ele.png":
+		{
+			"frame": {"x":605,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-dar.png":
+		{
+			"frame": {"x":649,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-none.png":
+		{
+			"frame": {"x":693,"y":656,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
+		},
+		"collection-card-wid.png":
+		{
+			"frame": {"x":734,"y":606,"w":40,"h":42},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":40,"h":42},
+			"sourceSize": {"w":40,"h":42}
 		}
 	}
 }
