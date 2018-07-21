@@ -53,18 +53,18 @@ export class Game {
     stage.group.enableSort = true
 
     const route = new Router(this.app.stage)
-    const collection = new Collection()
+    const collection = new Collection(this)
     // route.register('dialog', dialog)
     route.register('collection', collection)
     loader.loadAll()
     route.push('collection')
     // this.app.stage.addChild(collection)
     const dialog = new Dialog(this, scenario)
-    dialog.show('startup')
-    dialog.close()
+    // dialog.show('startup')
+    // dialog.close()
 
-    const dorpcard = new DropCard(this)
-    stage.addChild(dorpcard.container)
+    // const dorpcard = new DropCard(this)
+    // stage.addChild(dorpcard.container)
   }
 
   private async initOld() {
