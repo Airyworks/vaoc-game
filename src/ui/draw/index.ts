@@ -1,15 +1,25 @@
 import * as PIXI from 'pixi.js'
 import { Game } from '../../game'
 import loader from '../../util/loader'
+import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
 
+type MHSJAttributes = "wat" | "fir" | "wid" | "soi" | "ele" | "lig" | "dar" | "tim" | "spa"
+interface MahouShoujo {
+  name: string
+  HP: number
+  MP: number
+  MgA: number
+  MgD: number
+  SP: number
+  main: MHSJAttributes | 'none'
+  mainP: number
+}
 interface ITexture {
   [propName: string]: PIXI.Texture
 }
-const MHSJAttributes = [
-  'wat', 'fir', 'wid', 'soi', 'ele',
-  'lig', 'dar',
-  'tim', 'spa'
-]
+
+const cardTitleStyle = new PIXI.TextStyle(CARD_TITLE_WORD_STYLE)
+const cardAttrStyle = new PIXI.TextStyle(CARD_ATTR_WORD_STYLE)
 
 const graphic = new PIXI.Graphics()
 graphic.beginFill(0xFFFFFF)
@@ -65,11 +75,16 @@ class Point {
 
 export class DropCard {
   public readonly game: Game
+  private cardData: MahouShoujo
+  private cardImageMask: PIXI.Sprite
   public container: PIXI.Container = new PIXI.Container()
-  public points: Array<Point> = new Array()
-  public cardBack?: PIXI.Sprite
-  public cardBg?: PIXI.Sprite
-  public lightRect?: PIXI.Sprite
+  private points: Array<Point> = new Array()
+  private cardBack?: PIXI.Sprite
+  private cardBg?: PIXI.Sprite
+  private cardName?: PIXI.Sprite
+  private cardAttr?: PIXI.Sprite
+  private lightRect?: PIXI.Sprite
+  private textGroup: PIXI.Container
   private cardMove?: IterableIterator<undefined>
   private animationList: Array<() => IterableIterator<undefined>>
   private animationIndex: number
@@ -85,6 +100,41 @@ export class DropCard {
       this.cardOut
     ]
     this.animationIndex = 0
+    this.cardData = {
+      name: 'RUA',
+      HP: 600,
+      MP: 600,
+      MgA: 300,
+      MgD: 100,
+      SP: 300,
+      main: 'spa',
+      mainP: 255
+    }
+
+    const title = new PIXI.Text(this.cardData.name, cardTitleStyle)
+    title.anchor.set(0.5, 1)
+    title.position.set(0, -117)
+    const hp = new PIXI.Text(this.cardData.HP.toString(), cardAttrStyle)
+    hp.anchor.set(0, 1)
+    hp.position.set(-57, 82)
+    const magic = new PIXI.Text(this.cardData.MgA.toString(), cardAttrStyle)
+    magic.anchor.set(0, 1)
+    magic.position.set(-57, 104)
+    const speed = new PIXI.Text(this.cardData.SP.toString(), cardAttrStyle)
+    speed.anchor.set(0, 1)
+    speed.position.set(-57, 126)
+    this.textGroup = new PIXI.Container()
+    this.textGroup.addChild(title)
+    this.textGroup.addChild(hp)
+    this.textGroup.addChild(magic)
+    this.textGroup.addChild(speed)
+    this.textGroup.alpha = 0
+
+    this.cardImageMask = new PIXI.Sprite(PIXI.Texture.WHITE)
+    this.cardImageMask.anchor.set(0.5, 1)
+    this.cardImageMask.scale.set(18, 20)
+    this.cardImageMask.position.set(400, 364)
+    this.cardImageMask.alpha = 0
 
     this._load()
   }
@@ -116,12 +166,32 @@ export class DropCard {
     this.cardBack.y = 780
     this.container.addChild(this.cardBack)
 
+    this.container.addChild(this.cardImageMask)
+
     this.cardBg = new PIXI.Sprite(this.store['card-bg.png'])
     this.cardBg.anchor.set(0.5)
     this.cardBg.x = 400
     this.cardBg.y = 300
     this.cardBg.alpha = 0
     this.container.addChild(this.cardBg)
+
+    this.cardName = new PIXI.Sprite(this.store['card-name.png'])
+    this.cardName.anchor.set(0.5)
+    this.cardName.x = 400
+    this.cardName.y = 177.5
+    this.cardName.alpha = 0
+    this.container.addChild(this.cardName)
+
+    this.cardAttr = new PIXI.Sprite(this.store[`card-${this.cardData.main}.png`])
+    this.cardAttr.anchor.set(0.5)
+    this.cardAttr.x = 476.5
+    this.cardAttr.y = 349.5
+    this.cardAttr.alpha = 0
+    this.cardAttr.scale.set(1.5)
+    this.container.addChild(this.cardAttr)
+
+    this.container.addChild(this.textGroup)
+    this.textGroup.position.set(400, 300)
 
     for (let i = -110; i <= 110; i += 3) {
       for (let j = -147; j <= 147; j += 3) {
@@ -186,6 +256,7 @@ export class DropCard {
       yield
     }
     this.cardBg.alpha = 1
+    this.cardImageMask.alpha = 1
     while (k < 200) {
       k += yield
       this.lightRect.alpha = Math.pow((200 - k) / 120, 2)
@@ -195,12 +266,22 @@ export class DropCard {
     }
   }
   private *cardOut () {
-    if (!this.lightRect) {
+    while (!this.cardName || !this.cardAttr) {
       yield
     }
     let k = 0
-    while (k < 60) {
+    while (k < 30) {
       k += yield
+      this.cardName.alpha = k / 30
+      this.textGroup.alpha = k / 30
+      this.cardName.position.y = 177.5 + k / 3
+      if (k >= 10) {
+        this.cardImageMask.alpha = 1 - (k - 10) / 20
+      }
+      if (k >= 15) {
+        this.cardAttr.alpha = (k - 15) / 15
+        this.cardAttr.scale.set((60 - k) / 30)
+      }
     }
   }
 
