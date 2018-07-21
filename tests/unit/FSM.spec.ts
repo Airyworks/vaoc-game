@@ -1,4 +1,4 @@
-import { FSM } from '../../src/util/fsm'
+import { FSM } from 'src/util/fsm'
 describe('FSM', () => {
   it('FSM test: general function', async () => {
     const states = {

@@ -14,6 +14,9 @@ import axios from 'axios'
 import scenario from './asset/scenario'
 import { Veb3 } from 'vaoc-veb3'
 import { VEB3_CONFIG } from './config'
+import { Battleground } from './ui/battleground'
+import { Battle } from './component/battle';
+import { Character } from './component/battle/character';
 
 const name = [
   'Sumire', 'Shizuki', 'Hana', 'Harune', 'Hiyori', 'Kana', 'kanami', 'kotone',
@@ -65,12 +68,67 @@ export class Game {
     const route = new Router(this.app.stage)
     const collection = new Collection(this, veb3)
     // route.register('dialog', dialog)
-    route.register('collection', collection)
-    route.push('collection')
+    // route.register('collection', collection)
+    // route.push('collection')
     // this.app.stage.addChild(collection)
     // const dialog = new Dialog(this, scenario)
     // dialog.show('startup')
     // dialog.close()
+
+    const bt: Battle = new Battle([
+      new Character({ HP: 3500,
+        MP: 355,
+        ATK: 250,
+        DEF: 125,
+        SPD: 200,
+        MAIN: 'wat',
+        MAINP: 182,
+        NAME: '王跻欣01' }),
+      new Character({ HP: 5500,
+        MP: 285,
+        ATK: 180,
+        DEF: 115,
+        SPD: 250,
+        MAIN: 'spa',
+        MAINP: 230,
+        NAME: '王跻欣02' }),
+      new Character({ HP: 4500,
+        MP: 305,
+        ATK: 210,
+        DEF: 55,
+        SPD: 140,
+        MAIN: 'lig',
+        MAINP: 200,
+        NAME: '王跻欣03' })
+    ], [
+    new Character({ HP: 3500,
+      MP: 355,
+      ATK: 250,
+      DEF: 125,
+      SPD: 200,
+      MAIN: 'fir',
+      MAINP: 182,
+      NAME: '王大夫01' }),
+    new Character({ HP: 5500,
+      MP: 285,
+      ATK: 180,
+      DEF: 115,
+      SPD: 250,
+      MAIN: 'wid',
+      MAINP: 230,
+      NAME: '王大夫02' }),
+    new Character({ HP: 4500,
+      MP: 305,
+      ATK: 210,
+      DEF: 55,
+      SPD: 140,
+      MAIN: 'dar',
+      MAINP: 200,
+      NAME: '王大夫03' })
+    ])
+    while (!bt.next()) {
+      //
+    }
 
     const dorpcard = new DropCard(this, veb3)
     stage.addChild(dorpcard.container)

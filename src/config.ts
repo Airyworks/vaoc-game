@@ -73,3 +73,25 @@ export const CARD_ATTR_WORD_STYLE = {
 }
 
 export const DIALOG_SPEED = 50 // 50 ms
+
+export const BATTLE_K = {
+  L1L1: 1.4,
+  L2L1: 1.2,
+  L2L2: 1.6,
+  L3L2: 1.5,
+  L3L3: 1.8,
+  L3L1: 1.8,
+  NotAff: 1.0,
+  L1No: 1.3,
+  L2No: 1.3,
+  L3No: 1.3,
+  NoL1: 0.8,
+  NoL2: 0.8,
+  NoL3: 0.8
+}
+
+export const BATTLE_L = 144
+
+export const BATTLE_MAX_MAG = 3200
+
+export const BATTLE_CRITICAL = 3.0

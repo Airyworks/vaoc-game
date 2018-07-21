@@ -60,6 +60,10 @@
   version "4.8.0"
   resolved "http://registry.npm.taobao.org/@types/pixi.js/download/@types/pixi.js-4.8.0.tgz#961056751780046fe5da2166669a0f1e964a7b92"
 
+"@types/seedrandom@^2.4.27":
+  version "2.4.27"
+  resolved "http://registry.npm.taobao.org/@types/seedrandom/download/@types/seedrandom-2.4.27.tgz#9db563937dd86915f69092bc43259d2f48578e41"
+
 "@types/url-join@^0.8.2":
   version "0.8.2"
   resolved "http://registry.npm.taobao.org/@types/url-join/download/@types/url-join-0.8.2.tgz#1181ecbe1d97b7034e0ea1e35e62e86cc26b422d"
