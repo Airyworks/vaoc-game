@@ -78,6 +78,7 @@ export class Collection extends PIXI.Container {
     const down = new PIXI.Sprite(this.store['collection-down.png'])
     const hr1 = new PIXI.Sprite(this.store['collection-hr.png'])
     const hr2 = new PIXI.Sprite(this.store['collection-hr.png'])
+    const drawBtn = new PIXI.Sprite(this.store['collection-draw.png'])
 
     bg.x = 0
     bg.y = 0
@@ -111,7 +112,7 @@ export class Collection extends PIXI.Container {
     this.addChild(hr2)
 
     this.addChild(this.cardContainer)
-    this._drawCards()
+    this._showCards()
 
     up.x = 400
     up.y = 35
@@ -149,9 +150,25 @@ export class Collection extends PIXI.Container {
         down.scale.x = 1
         down.scale.y = 1
       })
+
+    drawBtn.x = 700
+    drawBtn.y = 35
+    drawBtn.anchor.set(0.5)
+    drawBtn.interactive = true
+    drawBtn.buttonMode = true
+    this.addChild(drawBtn)
+    drawBtn.on('pointerdown', () => {
+        drawBtn.texture = this.store['collection-draw-focus.png']
+      }).on('pointerup', () => {
+        // route go -1
+        drawBtn.texture = this.store['collection-draw.png']
+      }).on('pointerupoutside', () => {
+        // route go -1
+        drawBtn.texture = this.store['collection-draw.png']
+      })
   }
 
-  protected _drawCards() {
+  protected _showCards() {
     const card = this.store['collection-card-front-1.png']
     const cardIcon = this.store['collection-icon.png']
     const shadow = this.store['collection-card-shadow.png']

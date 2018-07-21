@@ -281,6 +281,7 @@ export class DropCard {
       }
     }
   }
+
   private *cardOut() {
     while (!this.cardName || !this.cardAttr || !this.textGroup) {
       yield
@@ -299,5 +300,26 @@ export class DropCard {
         this.cardAttr.scale.set((60 - k) / 30)
       }
     }
+    const close = new PIXI.Sprite(this.store['card-close.png'])
+    close.x = 400
+    close.y = 500
+    close.anchor.set(0.5)
+    this.container.addChild(close)
+    close.interactive = true
+    close.buttonMode = true
+    close.on('pointerdown', () => {
+      close.texture = this.store['card-close-focus.png']
+      }).on('pointerup', () => {
+        // route go -1
+        close.texture = this.store['card-close.png']
+        this._reset()
+      }).on('pointerupoutside', () => {
+        // route go -1
+        close.texture = this.store['card-close.png']
+      })
+  }
+
+  private _reset() {
+    return true
   }
 }
