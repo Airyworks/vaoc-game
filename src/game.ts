@@ -4,6 +4,7 @@ import loader from './util/loader'
 import { Player } from './component'
 import { Render } from './render/render'
 import { Ground } from './render/display/ground'
+import { Dialog } from './dialog'
 import dbLoader from './database/loader'
 import axios from 'axios'
 
@@ -43,7 +44,8 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
-
+    const dialog = new Dialog()
+    this.app.stage.addChild(dialog)
   }
 
   private async initOld() {
