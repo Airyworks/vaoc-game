@@ -26,7 +26,7 @@ export class Group {
     this.layers = tempLayers as LayersType
   }
 
-  public setGroup(target: ISprite, zOrder: ZOrderType) {
-    target.displayObject.object.parentGroup = this.layers[zOrder].group
+  public setGroup(target: PIXI.DisplayObject, zOrder: ZOrderType) {
+    target.parentGroup = this.layers[zOrder].group
   }
 }

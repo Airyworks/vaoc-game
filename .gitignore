@@ -18,4 +18,3 @@ coverage
 /build/config.gypi
 /static/assets
 !/static/assets/.gitkeep
-/src/config.ts

@@ -6,6 +6,7 @@ import { Render } from './render/render'
 import { Ground } from './render/display/ground'
 import { Dialog } from './dialog'
 import { Collection } from './collection'
+import { Group } from './util/group'
 import dbLoader from './database/loader'
 import { Router } from './util/route'
 import axios from 'axios'
@@ -13,6 +14,7 @@ import axios from 'axios'
 export class Game {
   public readonly app: PIXI.Application
   public player: Player
+  public group: Group
   public ground: Ground
   public renderer: Render
 
@@ -21,6 +23,8 @@ export class Game {
     this.app = new PIXI.Application(prop)
     this.app.stage = new PIXI.display.Stage()
     container.appendChild(this.app.view)
+
+    this.group = new Group(this.app.stage)
 
     this.renderer = new Render(this.app)
     this.player = new Player(this.renderer)
@@ -63,8 +67,8 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
-    const m1 = require('@/asset/image/m1.png')
-    const m2 = require('@/asset/image/m2.png')
+    const m1 = '/static/assets/images/m1.png'
+    const m2 = '/static/assets/images/m2.png'
     const m3 = '/static/assets/kuro-sprite.png'
     const m3Json = (await axios.get('/static/assets/kuro-sprite.json')).data
     console.log(m3Json)

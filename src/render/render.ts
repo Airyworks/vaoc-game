@@ -12,4 +12,8 @@ export class Render {
     this.ticker.add(loop)
   }
 
+  public removeTicker(loop: (delta: number) => void) {
+    this.ticker.remove(loop)
+  }
+
 }

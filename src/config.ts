@@ -25,3 +25,27 @@ export const VEB3_CONFIG = {
   // tslint:disable-next-line
   SHIRO_ABI: [{constant:true,inputs:[],name:'name',outputs:[{name:'',type:'string'}],payable:false,stateMutability:'view',type:'function',signature:'0x06fdde03'},{constant:false,inputs:[{name:'_spender',type:'address'},{name:'_value',type:'uint256'}],name:'approve',outputs:[{name:'',type:'bool'}],payable:false,stateMutability:'nonpayable',type:'function',signature:'0x095ea7b3'},{constant:true,inputs:[],name:'totalSupply',outputs:[{name:'supply',type:'uint256'}],payable:false,stateMutability:'view',type:'function',signature:'0x18160ddd'},{constant:false,inputs:[{name:'_from',type:'address'},{name:'_to',type:'address'},{name:'_value',type:'uint256'}],name:'transferFrom',outputs:[{name:'',type:'bool'}],payable:false,stateMutability:'nonpayable',type:'function',signature:'0x23b872dd'},{constant:true,inputs:[],name:'decimals',outputs:[{name:'',type:'uint256'}],payable:false,stateMutability:'view',type:'function',signature:'0x313ce567'},{constant:true,inputs:[],name:'founder',outputs:[{name:'',type:'address'}],payable:false,stateMutability:'view',type:'function',signature:'0x4d853ee5'},{constant:true,inputs:[{name:'_owner',type:'address',isCorrect:true}],name:'balanceOf',outputs:[{name:'',type:'uint256'}],payable:false,stateMutability:'view',type:'function',signature:'0x70a08231'},{constant:false,inputs:[{name:'newFounder',type:'address'}],name:'changeFounder',outputs:[],payable:false,stateMutability:'nonpayable',type:'function',signature:'0x93c32e06'},{constant:true,inputs:[],name:'symbol',outputs:[{name:'',type:'string'}],payable:false,stateMutability:'view',type:'function',signature:'0x95d89b41'},{constant:false,inputs:[{name:'_to',type:'address'},{name:'_value',type:'uint256'}],name:'transfer',outputs:[{name:'',type:'bool'}],payable:false,stateMutability:'nonpayable',type:'function',signature:'0xa9059cbb'},{constant:false,inputs:[{name:'_from',type:'address'},{name:'_value',type:'uint256'}],name:'spend',outputs:[],payable:false,stateMutability:'nonpayable',type:'function',signature:'0xaf7d6ca3'},{constant:false,inputs:[{name:'_tos',type:'address[]'},{name:'_values',type:'uint256[]'}],name:'distributeMultiple',outputs:[{name:'',type:'bool'}],payable:false,stateMutability:'nonpayable',type:'function',signature:'0xb319e9fa'},{constant:true,inputs:[{name:'_owner',type:'address'},{name:'_spender',type:'address'}],name:'allowance',outputs:[{name:'',type:'uint256'}],payable:false,stateMutability:'view',type:'function',signature:'0xdd62ed3e'},{constant:true,inputs:[],name:'distributed',outputs:[{name:'',type:'uint256'}],payable:false,stateMutability:'view',type:'function',signature:'0xf84b903e'},{constant:false,inputs:[{name:'_to',type:'address'},{name:'_amount',type:'uint256'}],name:'distribute',outputs:[{name:'',type:'bool'}],payable:false,stateMutability:'nonpayable',type:'function',signature:'0xfb932108'},{inputs:[],payable:false,stateMutability:'nonpayable',type:'constructor'},{anonymous:false,inputs:[{indexed:true,name:'_from',type:'address'},{indexed:true,name:'_to',type:'address'},{indexed:false,name:'_value',type:'uint256'}],name:'Transfer',type:'event',signature:'0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'},{anonymous:false,inputs:[{indexed:true,name:'_owner',type:'address'},{indexed:true,name:'_spender',type:'address'},{indexed:false,name:'_value',type:'uint256'}],name:'Approval',type:'event',signature:'0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925'}]
 }
+
+export const DIALOG_TITLE_STYLE = {
+  fontFamily: '楷体',
+  fontSize: 25,
+  fill: ['#fff'],
+  stroke: '#333',
+  strokeThickness: 4,
+  wordWrap: true,
+  wordWrapWidth: 600
+}
+
+export const DIALOG_WORD_STYLE = {
+  fontFamily: '楷体',
+  fontSize: 20,
+  fill: ['#fff'],
+  stroke: '#333',
+  strokeThickness: 4,
+  letterSpacing: 4,
+  wordWrap: true,
+  breakWords: true,
+  wordWrapWidth: 700
+}
+
+export const DIALOG_SPEED = 50 // 50 ms
