@@ -3,8 +3,8 @@ import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
 
-type MHSJAttributes = "wat" | "fir" | "wid" | "soi" | "ele" | "lig" | "dar" | "tim" | "spa"
-interface MahouShoujo {
+type MHSJAttributes = 'wat' | 'fir' | 'wid' | 'soi' | 'ele' | 'lig' | 'dar' | 'tim' | 'spa'
+interface IMahouShoujo {
   name: string
   HP: number
   MP: number
@@ -41,7 +41,7 @@ class Point {
   private sy: number
   private sp: number
 
-  constructor (x: number, y: number) {
+  constructor(x: number, y: number) {
     this.bubble = new PIXI.Sprite(texture)
     this.bubble.anchor.set(0.5)
     this.x = x + 400
@@ -55,7 +55,7 @@ class Point {
     this.sp = Math.random() / 2
   }
 
-  public update (k: number, total: number) {
+  public update(k: number, total: number) {
     const power = Math.min((1 - Math.cos(k / total * Math.PI)) / 2 * (1 + this.sp), 1)
     this.bubble.position.x = power * (this.x - this.sx) + this.sx
     this.bubble.position.y = power * (this.y - this.sy) + this.sy
@@ -64,7 +64,7 @@ class Point {
     }
   }
 
-  public fadeOut (k: number, total: number) {
+  public fadeOut(k: number, total: number) {
     if (this.bubble.alpha > 0.98 && Math.random() < k / (total - 50)) {
       this.bubble.alpha = 0.98
     } else if (this.bubble.alpha > 0 && this.bubble.alpha <= 0.98) {
@@ -73,12 +73,13 @@ class Point {
   }
 }
 
+// tslint:disable-next-line
 export class DropCard {
   public readonly game: Game
-  private cardData: MahouShoujo
-  private cardImageMask: PIXI.Sprite
   public container: PIXI.Container = new PIXI.Container()
-  private points: Array<Point> = new Array()
+  private cardData: IMahouShoujo
+  private cardImageMask: PIXI.Sprite
+  private points: Point[] = new Array()
   private cardBack?: PIXI.Sprite
   private cardBg?: PIXI.Sprite
   private cardName?: PIXI.Sprite
@@ -90,7 +91,7 @@ export class DropCard {
   private animationIndex: number
   private store: ITexture = {}
 
-  constructor (game: Game) {
+  constructor(game: Game) {
     this.game = game
     this.game.renderer.addTicker(this.render)
 
@@ -139,18 +140,24 @@ export class DropCard {
     this._load()
   }
 
-  private _load() {
-    const spritSheet = '/static/assets/images/card.json'
-    loader.toload(spritSheet, (ld) => {
-      const frames = ld.resources[spritSheet].data.frames
-      for (const frame of Object.keys(frames)) {
-        this.store[frame] = PIXI.Texture.fromFrame(frame)
+  public render = (delta: number) => {
+    if (this.cardMove) {
+      const { done } = this.cardMove.next(delta)
+      if (done) {
+        this.animationIndex++
+        if (this.animationIndex < this.animationList.length) {
+          this.cardMove = this.animationList[this.animationIndex].call(this)
+        } else {
+          this.cardMove = void 0
+        }
       }
-      this._init()
-    })
+    }
   }
 
-  
+  public start() {
+    this.cardMove = this.animationList[this.animationIndex].call(this)
+  }
+
   protected _init() {
     const bgColor = new PIXI.Graphics()
     bgColor.beginFill(0x000000, 0.8)
@@ -210,21 +217,18 @@ export class DropCard {
     this.start()
   }
 
-  public render = (delta: number) => {
-    if (this.cardMove) {
-      const { done } = this.cardMove.next(delta)
-      if (done) {
-        this.animationIndex++
-        if (this.animationIndex < this.animationList.length) {
-          this.cardMove = this.animationList[this.animationIndex].call(this)
-        } else {
-          this.cardMove = void 0
-        }
+  private _load() {
+    const spritSheet = '/static/assets/images/card.json'
+    loader.toload(spritSheet, (ld) => {
+      const frames = ld.resources[spritSheet].data.frames
+      for (const frame of Object.keys(frames)) {
+        this.store[frame] = PIXI.Texture.fromFrame(frame)
       }
-    }
+      this._init()
+    })
   }
 
-  private *cardMoveUp () {
+  private *cardMoveUp() {
     while (!this.cardBack) {
       yield
     }
@@ -235,15 +239,15 @@ export class DropCard {
     }
     this.cardBack.position.y = 300
   }
-  private *lightIn () {
+  private *lightIn() {
     while (!this.lightRect) {
       yield
     }
     let k = 0
     while (k < 60) {
       k += yield
-      for (let i = 0; i < this.points.length; i++) {
-        this.points[i].update(k, 60)
+      for (const point of this.points) {
+        point.update(k, 60)
       }
     }
     this.container.removeChild(this.cardBack as PIXI.DisplayObject)
@@ -260,12 +264,12 @@ export class DropCard {
     while (k < 200) {
       k += yield
       this.lightRect.alpha = Math.pow((200 - k) / 120, 2)
-      for (let i = 0; i < this.points.length; i++) {
-        this.points[i].fadeOut(k - 80, 120)
+      for (const point of this.points) {
+        point.fadeOut(k - 80, 120)
       }
     }
   }
-  private *cardOut () {
+  private *cardOut() {
     while (!this.cardName || !this.cardAttr) {
       yield
     }
@@ -283,9 +287,5 @@ export class DropCard {
         this.cardAttr.scale.set((60 - k) / 30)
       }
     }
-  }
-
-  public start () {
-    this.cardMove = this.animationList[this.animationIndex].call(this)
   }
 }
