@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js'
+import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
 
@@ -54,10 +55,26 @@ export class Collection extends PIXI.Container {
     dar: 'collection-card-dar.png'
   }
   private preferIndexes = Object.keys(this.prefer)
+  private game: Game
+  private cardContainerMove = {
+    order: false,
+    y: 0,
+    ready: false
+  }
 
-  constructor() {
+  constructor(game: Game) {
     super()
+    this.game = game
     this._load()
+  }
+
+  public render = (delta: number) => {
+    if (this.cardContainerMove.ready && this.cardContainerMove.order) {
+      this.cardContainer.y += delta
+    }
+    if (this.cardContainerMove.ready && !this.cardContainerMove.order) {
+      this.cardContainer.y -= delta
+    }
   }
 
   protected _load() {
@@ -127,6 +144,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         up.scale.x = 1
         up.scale.y = 1
+        this._switchPage(this.index + 1)
       }).on('pointerupoutside', () => {
         // route go -1
         up.scale.x = 1
@@ -145,6 +163,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         down.scale.x = 1
         down.scale.y = 1
+        this._switchPage(this.index - 1)
       }).on('pointerupoutside', () => {
         // route go -1
         down.scale.x = 1
@@ -166,6 +185,8 @@ export class Collection extends PIXI.Container {
         // route go -1
         drawBtn.texture = this.store['collection-draw.png']
       })
+    this.game.renderer.addTicker(this.render)
+    this.cardContainerMove.ready = true
   }
 
   protected _showCards() {
@@ -216,12 +237,41 @@ export class Collection extends PIXI.Container {
       this.cardContainer.addChild(shadowS)
       this.cardContainer.addChild(cardDemo)
       this.cardContainer.addChild(cardS)
-      this.cardContainer.addChild(preferS)
       this.cardContainer.addChild(cardIconS)
+      this.cardContainer.addChild(preferS)
       this.cardContainer.addChild(title)
       this.cardContainer.addChild(hp)
       this.cardContainer.addChild(magic)
       this.cardContainer.addChild(speed)
     }
+  }
+
+  private async _switchPage(index: number): Promise<any> {
+    if (index < 0 || index * 8 >= this.cards.length) {
+      return false
+    } else {
+      this.cardContainerMove.ready = false
+      await this._movePage(-300)
+      console.log(123)
+      await this._movePage(0)
+      this.cardContainerMove.ready = true
+    }
+  }
+
+  private async _movePage(y: number): Promise<any> {
+    const order = y - this.cardContainer.y > 0 ? true : false
+    this.cardContainerMove.y = y
+    this.cardContainerMove.order = order
+    console.log(this.cardContainerMove)
+    return new Promise((res) => {
+      while (true) {
+        if (!order && this.cardContainerMove.y > this.cardContainer.y) {
+          res(true)
+        }
+        if (order && this.cardContainerMove.y < this.cardContainer.y) {
+          res(true)
+        }
+      }
+    })
   }
 }

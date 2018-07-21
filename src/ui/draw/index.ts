@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
-import { Veb3 } from 'vaoc-veb3';
+import { Veb3 } from 'vaoc-veb3'
 
 type MHSJAttributes = 'wat' | 'fir' | 'wid' | 'soi' | 'ele' | 'lig' | 'dar' | 'tim' | 'spa'
 interface IMahouShoujo {
