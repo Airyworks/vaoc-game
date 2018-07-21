@@ -16,5 +16,6 @@ yarn-error.log*
 
 coverage
 /build/config.gypi
-/static/assets
+# /static/assets
+/static/assets/rpg-maker-mv
 !/static/assets/.gitkeep
