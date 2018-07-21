@@ -45,6 +45,7 @@ export class Dialog {
     game.group.setGroup(this.container, 1)
     this.container.interactive = true
     this.container.buttonMode = false
+    this.container.alpha = 0
     this.game.app.stage.addChild(this.container)
 
     this._init()

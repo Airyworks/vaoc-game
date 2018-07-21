@@ -1,6 +1,8 @@
 import * as veb3 from 'vaoc-veb3'
 
 export interface ICard {
+  id?: string,
+  hash: string,
   HP: number,
   MP: number,
   ATK: number,
@@ -12,6 +14,8 @@ export interface ICard {
 }
 
 export class Card implements ICard {
+  public id: string = ''
+  public hash: string = ''
   public HP: number = 0
   public MP: number = 0
   public ATK: number = 0

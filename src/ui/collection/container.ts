@@ -125,7 +125,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         back.scale.x = 1
         back.scale.y = 1
-        console.log('back down')
+        this.game.route.push('hello')
       }).on('pointerupoutside', () => {
         // route go -1
         back.scale.x = 1
