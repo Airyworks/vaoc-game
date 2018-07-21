@@ -4,6 +4,7 @@ import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
 import { Veb3 } from 'vaoc-veb3'
 import { kernel } from '../../kernel'
+import axios from 'axios'
 
 type MHSJAttributes = 'wat' | 'fir' | 'wid' | 'soi' | 'ele' | 'lig' | 'dar' | 'tim' | 'spa'
 interface IMahouShoujo {
@@ -78,6 +79,7 @@ export class DropCard {
   public readonly game: Game
   public readonly veb3: Veb3
   public container: PIXI.Container = new PIXI.Container()
+  private headImage?: PIXI.Sprite
   private cardData?: IMahouShoujo
   private cardImageMask: PIXI.Sprite
   private points: Point[] = new Array()
@@ -87,6 +89,7 @@ export class DropCard {
   private cardAttr?: PIXI.Sprite
   private lightRect?: PIXI.Sprite
   private textGroup?: PIXI.Container
+  private headLayer: PIXI.Container = new PIXI.Container()
   private cardMove?: IterableIterator<undefined>
   private animationList: Array<() => IterableIterator<undefined>>
   private animationIndex: number
@@ -133,21 +136,31 @@ export class DropCard {
     this.container.renderable = true
     this._preAnimation()
     this.cardMove = this.animationList[this.animationIndex].call(this)
-    this.veb3.createNewMahouShoujo().then((res) => {
-      const id = res.id
-      const attr = res.attr
-      this.cardData = {
-        name: 'RUA',
-        HP: attr.HP,
-        MgA: attr.MgA,
-        SP: attr.SP,
-        main: attr.main,
-        mainP: attr.mainP
-      }
-      this._fullAnimation()
-    }).catch((err) => {
-      alert(err.message)
-      return
+    this.veb3.createNewMahouShoujo().then((card) => {
+      const id = card.id
+      const attr = card.attr
+      const hash = this.veb3.web3.utils.toHex(id).substr(2).padStart(64, '0')
+      axios.post('http://localhost:15000/api/v1/fakegen', {
+        hash
+      }).then((res) => {
+        if (res.status === 200) {
+          this.headImage = PIXI.Sprite.fromImage('data:image/png;base64,' + res.data)
+          this.headImage.anchor.set(0.5)
+          this.headImage.scale.set(3)
+          this.headLayer.addChild(this.headImage)
+        }
+        this.cardData = {
+          name: 'RUA',
+          HP: attr.HP,
+          MgA: attr.MgA,
+          SP: attr.SP,
+          main: attr.main,
+          mainP: attr.mainP
+        }
+        this._fullAnimation()
+      })
+    }).catch(() => {
+      this._reset()
     })
   }
 
@@ -159,6 +172,8 @@ export class DropCard {
     })
     this.cardBack = new PIXI.Sprite(this.store['card-back.png'])
     this.cardBack.alpha = 0
+    this.headLayer.position.set(400, 280)
+    this.headLayer.alpha = 0
     this.cardImageMask.anchor.set(0.5, 1)
     this.cardImageMask.scale.set(18, 20)
     this.cardImageMask.position.set(400, 364)
@@ -169,6 +184,7 @@ export class DropCard {
     this.cardName.alpha = 0
     this.lightRect = new PIXI.Sprite(PIXI.Texture.WHITE)
     this.container.addChild(this.cardBack)
+    this.container.addChild(this.headLayer)
     this.container.addChild(this.cardImageMask)
     this.container.addChild(this.cardBg)
     this.container.addChild(this.cardName)
@@ -182,6 +198,7 @@ export class DropCard {
       this.cardBack.x = 400
       this.cardBack.y = 780
     }
+    this.headLayer.alpha = 0
     this.cardImageMask.alpha = 0
     if (this.cardBg) {
       this.cardBg.alpha = 0
@@ -298,6 +315,7 @@ export class DropCard {
       yield
     }
     this.cardBg.alpha = 1
+    this.headLayer.alpha = 1
     this.cardImageMask.alpha = 1
     while (k < 200) {
       k += yield
