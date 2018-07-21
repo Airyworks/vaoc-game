@@ -1,0 +1,113 @@
+{
+	"meta": {
+		"image": "/static/assets/images/battle.png",
+		"size": {"w":1090,"h":798},
+		"scale": "1"
+	},
+	"frames": {
+		"battle-speedbar.png":
+		{
+			"frame": {"x":2,"y":606,"w":654,"h":30},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":654,"h":30},
+			"sourceSize": {"w":654,"h":30}
+		},
+		"battle-background.png":
+		{
+			"frame": {"x":2,"y":2,"w":800,"h":600},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":800,"h":600},
+			"sourceSize": {"w":800,"h":600}
+		},
+		"battle-ele.png":
+		{
+			"frame": {"x":2,"y":640,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-fir.png":
+		{
+			"frame": {"x":132,"y":640,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-lig.png":
+		{
+			"frame": {"x":262,"y":640,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-none.png":
+		{
+			"frame": {"x":392,"y":640,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-vs.png":
+		{
+			"frame": {"x":936,"y":2,"w":152,"h":138},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":152,"h":138},
+			"sourceSize": {"w":152,"h":138}
+		},
+		"battle-spa.png":
+		{
+			"frame": {"x":652,"y":640,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-wid.png":
+		{
+			"frame": {"x":806,"y":2,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-tim.png":
+		{
+			"frame": {"x":806,"y":162,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-wat.png":
+		{
+			"frame": {"x":806,"y":322,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-soi.png":
+		{
+			"frame": {"x":806,"y":482,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		},
+		"battle-dar.png":
+		{
+			"frame": {"x":522,"y":640,"w":126,"h":156},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {"x":0,"y":0,"w":126,"h":156},
+			"sourceSize": {"w":126,"h":156}
+		}
+	}
+}

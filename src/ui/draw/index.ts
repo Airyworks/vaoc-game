@@ -2,14 +2,13 @@ import * as PIXI from 'pixi.js'
 import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
+import { Veb3 } from 'vaoc-veb3';
 
 type MHSJAttributes = 'wat' | 'fir' | 'wid' | 'soi' | 'ele' | 'lig' | 'dar' | 'tim' | 'spa'
 interface IMahouShoujo {
   name: string
   HP: number
-  MP: number
   MgA: number
-  MgD: number
   SP: number
   main: MHSJAttributes | 'none'
   mainP: number
@@ -76,8 +75,9 @@ class Point {
 // tslint:disable-next-line
 export class DropCard {
   public readonly game: Game
+  public readonly veb3: Veb3
   public container: PIXI.Container = new PIXI.Container()
-  private cardData: IMahouShoujo
+  private cardData?: IMahouShoujo
   private cardImageMask: PIXI.Sprite
   private points: Point[] = new Array()
   private cardBack?: PIXI.Sprite
@@ -85,14 +85,15 @@ export class DropCard {
   private cardName?: PIXI.Sprite
   private cardAttr?: PIXI.Sprite
   private lightRect?: PIXI.Sprite
-  private textGroup: PIXI.Container
+  private textGroup?: PIXI.Container
   private cardMove?: IterableIterator<undefined>
   private animationList: Array<() => IterableIterator<undefined>>
   private animationIndex: number
   private store: ITexture = {}
 
-  constructor(game: Game) {
+  constructor(game: Game, veb3: Veb3) {
     this.game = game
+    this.veb3 = veb3
     this.game.renderer.addTicker(this.render)
 
     this.animationList = [
@@ -101,35 +102,6 @@ export class DropCard {
       this.cardOut
     ]
     this.animationIndex = 0
-    this.cardData = {
-      name: 'RUA',
-      HP: 600,
-      MP: 600,
-      MgA: 300,
-      MgD: 100,
-      SP: 300,
-      main: 'spa',
-      mainP: 255
-    }
-
-    const title = new PIXI.Text(this.cardData.name, cardTitleStyle)
-    title.anchor.set(0.5, 1)
-    title.position.set(0, -117)
-    const hp = new PIXI.Text(this.cardData.HP.toString(), cardAttrStyle)
-    hp.anchor.set(0, 1)
-    hp.position.set(-57, 82)
-    const magic = new PIXI.Text(this.cardData.MgA.toString(), cardAttrStyle)
-    magic.anchor.set(0, 1)
-    magic.position.set(-57, 104)
-    const speed = new PIXI.Text(this.cardData.SP.toString(), cardAttrStyle)
-    speed.anchor.set(0, 1)
-    speed.position.set(-57, 126)
-    this.textGroup = new PIXI.Container()
-    this.textGroup.addChild(title)
-    this.textGroup.addChild(hp)
-    this.textGroup.addChild(magic)
-    this.textGroup.addChild(speed)
-    this.textGroup.alpha = 0
 
     this.cardImageMask = new PIXI.Sprite(PIXI.Texture.WHITE)
     this.cardImageMask.anchor.set(0.5, 1)
@@ -137,7 +109,13 @@ export class DropCard {
     this.cardImageMask.position.set(400, 364)
     this.cardImageMask.alpha = 0
 
+    const bgColor = new PIXI.Graphics()
+    bgColor.beginFill(0x000000, 0.8)
+    bgColor.drawRect(0, 0, 800, 600)
+    this.container.addChild(bgColor)
+
     this._load()
+    this.start()
   }
 
   public render = (delta: number) => {
@@ -158,22 +136,19 @@ export class DropCard {
     this.cardMove = this.animationList[this.animationIndex].call(this)
   }
 
-  protected _init() {
-    const bgColor = new PIXI.Graphics()
-    bgColor.beginFill(0x000000, 0.8)
-    bgColor.drawRect(0, 0, 800, 600)
-    this.container.addChild(bgColor)
-
-    const bg = new PIXI.Sprite(this.store['card-bg.png'])
-    const name = new PIXI.Sprite(this.store['card-name.png'])
-
+  protected _preinit() {
     this.cardBack = new PIXI.Sprite(this.store['card-back.png'])
     this.cardBack.anchor.set(0.5)
     this.cardBack.x = 400
     this.cardBack.y = 780
     this.container.addChild(this.cardBack)
+  }
 
+  protected _init() {
     this.container.addChild(this.cardImageMask)
+
+    const bg = new PIXI.Sprite(this.store['card-bg.png'])
+    const name = new PIXI.Sprite(this.store['card-name.png'])
 
     this.cardBg = new PIXI.Sprite(this.store['card-bg.png'])
     this.cardBg.anchor.set(0.5)
@@ -189,6 +164,9 @@ export class DropCard {
     this.cardName.alpha = 0
     this.container.addChild(this.cardName)
 
+    if (!this.cardData) {
+      return
+    }
     this.cardAttr = new PIXI.Sprite(this.store[`card-${this.cardData.main}.png`])
     this.cardAttr.anchor.set(0.5)
     this.cardAttr.x = 476.5
@@ -197,6 +175,24 @@ export class DropCard {
     this.cardAttr.scale.set(1.5)
     this.container.addChild(this.cardAttr)
 
+    const title = new PIXI.Text(this.cardData.name, cardTitleStyle)
+    title.anchor.set(0.5, 1)
+    title.position.set(0, -117)
+    const hp = new PIXI.Text(this.cardData.HP.toString(), cardAttrStyle)
+    hp.anchor.set(0, 1)
+    hp.position.set(-57, 82)
+    const magic = new PIXI.Text(this.cardData.MgA.toString(), cardAttrStyle)
+    magic.anchor.set(0, 1)
+    magic.position.set(-57, 104)
+    const speed = new PIXI.Text(this.cardData.SP.toString(), cardAttrStyle)
+    speed.anchor.set(0, 1)
+    speed.position.set(-57, 126)
+    this.textGroup = new PIXI.Container()
+    this.textGroup.addChild(title)
+    this.textGroup.addChild(hp)
+    this.textGroup.addChild(magic)
+    this.textGroup.addChild(speed)
+    this.textGroup.alpha = 0
     this.container.addChild(this.textGroup)
     this.textGroup.position.set(400, 300)
 
@@ -214,7 +210,6 @@ export class DropCard {
     this.lightRect.scale.set(0, 70)
     this.lightRect.alpha = 0
     this.container.addChild(this.lightRect)
-    this.start()
   }
 
   private _load() {
@@ -224,7 +219,24 @@ export class DropCard {
       for (const frame of Object.keys(frames)) {
         this.store[frame] = PIXI.Texture.fromFrame(frame)
       }
-      this._init()
+      this._preinit()
+
+      this.veb3.createNewMahouShoujo().then((res) => {
+        const id = res.id
+        const attr = res.attr
+        this.cardData = {
+          name: 'RUA',
+          HP: attr.HP,
+          MgA: attr.MgA,
+          SP: attr.SP,
+          main: attr.main,
+          mainP: attr.mainP
+        }
+        this._init()
+      }).catch((err) => {
+        alert(err.message)
+        return
+      })
     })
   }
 
@@ -271,7 +283,7 @@ export class DropCard {
   }
 
   private *cardOut() {
-    while (!this.cardName || !this.cardAttr) {
+    while (!this.cardName || !this.cardAttr || !this.textGroup) {
       yield
     }
     let k = 0
