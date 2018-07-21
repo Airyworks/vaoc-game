@@ -7,7 +7,8 @@ export interface ICard {
   DEF: number,
   SPD: number,
   MAIN: veb3.MHSJAttributes | 'none',
-  MAINP: number
+  MAINP: number,
+  NAME: string
 }
 
 export class Card implements ICard {
@@ -19,6 +20,7 @@ export class Card implements ICard {
   public SPD: number = 0
   public MAIN: veb3.MHSJAttributes | 'none' = 'none'
   public MAINP: number = 0
+  public NAME: string = ''
   constructor(init: ICard) {
     Object.assign(this, init)
   }

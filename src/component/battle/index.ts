@@ -2,6 +2,8 @@ import { Character } from './character'
 import * as seedrandom from 'seedrandom'
 import { BATTLE_K, BATTLE_L, BATTLE_MAX_MAG, BATTLE_CRITICAL} from '../../config'
 
+const logger = console.log
+
 function findCharLevel(ch: Character) {
   switch (ch.MAIN) {
     case 'spa':
@@ -44,6 +46,15 @@ function getK(a: Character, b: Character) {
         case 'none':
           return BATTLE_K.L1No
         case 'wid':
+          return BATTLE_K.L1L1
+        default:
+          return BATTLE_K.NotAff
+      }
+    case 'wid':
+      switch (b.MAIN) {
+        case 'none':
+          return BATTLE_K.L1No
+        case 'soi':
           return BATTLE_K.L1L1
         default:
           return BATTLE_K.NotAff
@@ -125,9 +136,9 @@ function getK(a: Character, b: Character) {
 function damage(a: Character, b: Character, critical: boolean) {
   let k = getK(a, b)
   if (a.MAIN !== 'none' && b.MAIN !== 'none') {
-  k = k * Math.sqrt((a.MAINP - b. MAINP) / 255 + 1)
+  k = k * Math.sqrt((a.MAINP - b.MAINP) / 255 + 1)
   }
-  return a.ATK * k * (critical ? BATTLE_CRITICAL : 1) * b.DEF / 144
+  return Math.floor(a.ATK * k * (critical ? BATTLE_CRITICAL : 1) * b.DEF / BATTLE_L)
 }
 
 export class Battle {
@@ -135,6 +146,8 @@ export class Battle {
   public self: Character[] = []
   public opponent: Character[] = []
   public rdg: () => number
+  public isEnd: boolean = false
+  public isWin: boolean = false
 
   constructor(self: Character[], oppo: Character[], seed?: string) {
     this.self = self
@@ -158,7 +171,29 @@ export class Battle {
     const filtered = attackedSet.filter((v) => v.curHP > 0)
     const attCard = filtered[Math.floor(this.rdg() * filtered.length)]
 
+    if (logger) {
+      logger(`${min.NAME} 对 ${attCard.NAME} 发动了攻击 !`)
+    }
+
     this._battle(min, attCard)
+
+    if (this._isEnd()) {
+      this.isEnd = true
+      if (this._isWin()) {
+        if (logger) {
+          logger(`对方卡牌全部被破坏!`)
+          logger(`胜利!`)
+        }
+        this.isWin = true
+      } else {
+        if (logger) {
+          logger(`你的卡牌全部被破坏!`)
+          logger(`失败!`)
+        }
+        this.isWin = false
+      }
+      return true
+    }
 
     const moved = min.pos
 
@@ -167,14 +202,43 @@ export class Battle {
       v.curMP += v.MP
     })
     min.pos = min.SPD
+    // not end
+    return false
+  }
+
+  protected _isEnd() {
+    if (this.self.filter((v) => v.curHP > 0).length *
+    this.opponent.filter((v) => v.curHP > 0).length === 0) {
+      return true
+    }
+    return false
+  }
+
+  protected _isWin() {
+    if (this.self.filter((v) => v.curHP > 0).length) {
+      return false
+    } else {
+      return true
+    }
   }
 
   protected _battle(a: Character, b: Character) {
     const useCritical = a.curMP >= BATTLE_MAX_MAG
+    if (useCritical && logger) {
+      logger(`${a.NAME} 对 ${b.NAME} 的攻击触发了暴击!`)
+    }
 
     // battle
     const dmg = damage(a, b, useCritical)
     b.curHP = Math.max(0, b.curHP - dmg)
+
+    if (logger) {
+      logger(`${a.NAME} 对 ${b.NAME} 的攻击造成了 ${dmg} 点伤害`)
+      logger(`${b.NAME} 还剩 ${b.curHP} 点生命值`)
+      if (b.curHP <= 0) {
+        logger(`${b.NAME} 生命值耗光, 被破坏`)
+      }
+    }
 
     // after battle
     if (useCritical) {
