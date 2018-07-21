@@ -2,7 +2,9 @@ import * as PIXI from 'pixi.js'
 import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
-import { Veb3 } from 'vaoc-veb3';
+import { Veb3 } from 'vaoc-veb3'
+import { kernel } from '../../kernel'
+import axios from 'axios'
 
 type MHSJAttributes = 'wat' | 'fir' | 'wid' | 'soi' | 'ele' | 'lig' | 'dar' | 'tim' | 'spa'
 interface IMahouShoujo {
@@ -77,6 +79,7 @@ export class DropCard {
   public readonly game: Game
   public readonly veb3: Veb3
   public container: PIXI.Container = new PIXI.Container()
+  private headImage?: PIXI.Sprite
   private cardData?: IMahouShoujo
   private cardImageMask: PIXI.Sprite
   private points: Point[] = new Array()
@@ -86,6 +89,7 @@ export class DropCard {
   private cardAttr?: PIXI.Sprite
   private lightRect?: PIXI.Sprite
   private textGroup?: PIXI.Container
+  private headLayer: PIXI.Container = new PIXI.Container()
   private cardMove?: IterableIterator<undefined>
   private animationList: Array<() => IterableIterator<undefined>>
   private animationIndex: number
@@ -94,6 +98,7 @@ export class DropCard {
   constructor(game: Game, veb3: Veb3) {
     this.game = game
     this.veb3 = veb3
+    this.container.renderable = false
     this.game.renderer.addTicker(this.render)
 
     this.animationList = [
@@ -104,10 +109,6 @@ export class DropCard {
     this.animationIndex = 0
 
     this.cardImageMask = new PIXI.Sprite(PIXI.Texture.WHITE)
-    this.cardImageMask.anchor.set(0.5, 1)
-    this.cardImageMask.scale.set(18, 20)
-    this.cardImageMask.position.set(400, 364)
-    this.cardImageMask.alpha = 0
 
     const bgColor = new PIXI.Graphics()
     bgColor.beginFill(0x000000, 0.8)
@@ -115,7 +116,6 @@ export class DropCard {
     this.container.addChild(bgColor)
 
     this._load()
-    this.start()
   }
 
   public render = (delta: number) => {
@@ -133,68 +133,125 @@ export class DropCard {
   }
 
   public start() {
+    this.container.renderable = true
+    this._preAnimation()
     this.cardMove = this.animationList[this.animationIndex].call(this)
-  }
-
-  protected _preinit() {
-    this.cardBack = new PIXI.Sprite(this.store['card-back.png'])
-    this.cardBack.anchor.set(0.5)
-    this.cardBack.x = 400
-    this.cardBack.y = 780
-    this.container.addChild(this.cardBack)
+    this.veb3.createNewMahouShoujo().then((card) => {
+      const id = card.id
+      const attr = card.attr
+      const hash = this.veb3.web3.utils.toHex(id).substr(2).padStart(64, '0')
+      axios.post('http://localhost:15000/api/v1/fakegen', {
+        hash
+      }).then((res) => {
+        if (res.status === 200) {
+          this.headImage = PIXI.Sprite.fromImage('data:image/png;base64,' + res.data)
+          this.headImage.anchor.set(0.5)
+          this.headImage.scale.set(3)
+          this.headLayer.addChild(this.headImage)
+        }
+        this.cardData = {
+          name: 'RUA',
+          HP: attr.HP,
+          MgA: attr.MgA,
+          SP: attr.SP,
+          main: attr.main,
+          mainP: attr.mainP
+        }
+        this._fullAnimation()
+      })
+    }).catch(() => {
+      this._reset()
+    })
   }
 
   protected _init() {
-    this.container.addChild(this.cardImageMask)
-
-    const bg = new PIXI.Sprite(this.store['card-bg.png'])
-    const name = new PIXI.Sprite(this.store['card-name.png'])
-
+    // register
+    kernel.on('drawCardStart', async (ctx: {}, next) => {
+      await next()
+      this.start()
+    })
+    this.cardBack = new PIXI.Sprite(this.store['card-back.png'])
+    this.cardBack.alpha = 0
+    this.headLayer.position.set(400, 280)
+    this.headLayer.alpha = 0
+    this.cardImageMask.anchor.set(0.5, 1)
+    this.cardImageMask.scale.set(18, 20)
+    this.cardImageMask.position.set(400, 364)
+    this.cardImageMask.alpha = 0
     this.cardBg = new PIXI.Sprite(this.store['card-bg.png'])
-    this.cardBg.anchor.set(0.5)
-    this.cardBg.x = 400
-    this.cardBg.y = 300
     this.cardBg.alpha = 0
-    this.container.addChild(this.cardBg)
-
     this.cardName = new PIXI.Sprite(this.store['card-name.png'])
-    this.cardName.anchor.set(0.5)
-    this.cardName.x = 400
-    this.cardName.y = 177.5
     this.cardName.alpha = 0
+    this.lightRect = new PIXI.Sprite(PIXI.Texture.WHITE)
+    this.container.addChild(this.cardBack)
+    this.container.addChild(this.headLayer)
+    this.container.addChild(this.cardImageMask)
+    this.container.addChild(this.cardBg)
     this.container.addChild(this.cardName)
+  }
 
-    if (!this.cardData) {
-      return
+  protected _preAnimation() {
+    this.animationIndex = 0
+    if (this.cardBack) {
+      this.cardBack.alpha = 1
+      this.cardBack.anchor.set(0.5)
+      this.cardBack.x = 400
+      this.cardBack.y = 780
     }
-    this.cardAttr = new PIXI.Sprite(this.store[`card-${this.cardData.main}.png`])
-    this.cardAttr.anchor.set(0.5)
-    this.cardAttr.x = 476.5
-    this.cardAttr.y = 349.5
-    this.cardAttr.alpha = 0
-    this.cardAttr.scale.set(1.5)
-    this.container.addChild(this.cardAttr)
+    this.headLayer.alpha = 0
+    this.cardImageMask.alpha = 0
+    if (this.cardBg) {
+      this.cardBg.alpha = 0
+    }
+    if (this.cardName) {
+      this.cardName.alpha = 0
+    }
+  }
 
-    const title = new PIXI.Text(this.cardData.name, cardTitleStyle)
-    title.anchor.set(0.5, 1)
-    title.position.set(0, -117)
-    const hp = new PIXI.Text(this.cardData.HP.toString(), cardAttrStyle)
-    hp.anchor.set(0, 1)
-    hp.position.set(-57, 82)
-    const magic = new PIXI.Text(this.cardData.MgA.toString(), cardAttrStyle)
-    magic.anchor.set(0, 1)
-    magic.position.set(-57, 104)
-    const speed = new PIXI.Text(this.cardData.SP.toString(), cardAttrStyle)
-    speed.anchor.set(0, 1)
-    speed.position.set(-57, 126)
-    this.textGroup = new PIXI.Container()
-    this.textGroup.addChild(title)
-    this.textGroup.addChild(hp)
-    this.textGroup.addChild(magic)
-    this.textGroup.addChild(speed)
-    this.textGroup.alpha = 0
-    this.container.addChild(this.textGroup)
-    this.textGroup.position.set(400, 300)
+  protected _fullAnimation() {
+    if (this.cardBg) {
+      this.cardBg.anchor.set(0.5)
+      this.cardBg.x = 400
+      this.cardBg.y = 300
+      this.cardBg.alpha = 0
+    }
+    if (this.cardName) {
+      this.cardName.anchor.set(0.5)
+      this.cardName.x = 400
+      this.cardName.y = 177.5
+      this.cardName.alpha = 0
+    }
+
+    if (this.cardData) {
+      this.cardAttr = new PIXI.Sprite(this.store[`card-${this.cardData.main}.png`])
+      this.cardAttr.anchor.set(0.5)
+      this.cardAttr.x = 476.5
+      this.cardAttr.y = 349.5
+      this.cardAttr.alpha = 0
+      this.cardAttr.scale.set(1.5)
+      this.container.addChild(this.cardAttr)
+
+      const title = new PIXI.Text(this.cardData.name, cardTitleStyle)
+      title.anchor.set(0.5, 1)
+      title.position.set(0, -117)
+      const hp = new PIXI.Text(this.cardData.HP.toString(), cardAttrStyle)
+      hp.anchor.set(0, 1)
+      hp.position.set(-57, 82)
+      const magic = new PIXI.Text(this.cardData.MgA.toString(), cardAttrStyle)
+      magic.anchor.set(0, 1)
+      magic.position.set(-57, 104)
+      const speed = new PIXI.Text(this.cardData.SP.toString(), cardAttrStyle)
+      speed.anchor.set(0, 1)
+      speed.position.set(-57, 126)
+      this.textGroup = new PIXI.Container()
+      this.textGroup.addChild(title)
+      this.textGroup.addChild(hp)
+      this.textGroup.addChild(magic)
+      this.textGroup.addChild(speed)
+      this.textGroup.alpha = 0
+      this.container.addChild(this.textGroup)
+      this.textGroup.position.set(400, 300)
+    }
 
     for (let i = -110; i <= 110; i += 3) {
       for (let j = -147; j <= 147; j += 3) {
@@ -204,12 +261,13 @@ export class DropCard {
       }
     }
 
-    this.lightRect = new PIXI.Sprite(PIXI.Texture.WHITE)
-    this.lightRect.anchor.set(0.5)
-    this.lightRect.position.set(400, 300)
-    this.lightRect.scale.set(0, 70)
-    this.lightRect.alpha = 0
-    this.container.addChild(this.lightRect)
+    if (this.lightRect) {
+      this.lightRect.anchor.set(0.5)
+      this.lightRect.position.set(400, 300)
+      this.lightRect.scale.set(0, 70)
+      this.lightRect.alpha = 0
+      this.container.addChild(this.lightRect)
+    }
   }
 
   private _load() {
@@ -219,24 +277,7 @@ export class DropCard {
       for (const frame of Object.keys(frames)) {
         this.store[frame] = PIXI.Texture.fromFrame(frame)
       }
-      this._preinit()
-
-      this.veb3.createNewMahouShoujo().then((res) => {
-        const id = res.id
-        const attr = res.attr
-        this.cardData = {
-          name: 'RUA',
-          HP: attr.HP,
-          MgA: attr.MgA,
-          SP: attr.SP,
-          main: attr.main,
-          mainP: attr.mainP
-        }
-        this._init()
-      }).catch((err) => {
-        alert(err.message)
-        return
-      })
+      this._init()
     })
   }
 
@@ -252,7 +293,7 @@ export class DropCard {
     this.cardBack.position.y = 300
   }
   private *lightIn() {
-    while (!this.lightRect) {
+    while (!this.lightRect || !this.cardData) {
       yield
     }
     let k = 0
@@ -262,7 +303,9 @@ export class DropCard {
         point.update(k, 60)
       }
     }
-    this.container.removeChild(this.cardBack as PIXI.DisplayObject)
+    if (this.cardBack) {
+      this.cardBack.alpha = 0
+    }
     while (k < 80) {
       k += yield
       this.lightRect.scale.x = (k - 60) * 4.1
@@ -272,6 +315,7 @@ export class DropCard {
       yield
     }
     this.cardBg.alpha = 1
+    this.headLayer.alpha = 1
     this.cardImageMask.alpha = 1
     while (k < 200) {
       k += yield
@@ -312,6 +356,7 @@ export class DropCard {
       }).on('pointerup', () => {
         // route go -1
         close.texture = this.store['card-close.png']
+        this.container.removeChild(close)
         this._reset()
       }).on('pointerupoutside', () => {
         // route go -1
@@ -320,6 +365,20 @@ export class DropCard {
   }
 
   private _reset() {
+    this.container.renderable = false
+    this.cardData = void 0
+    for (const value of this.points) {
+      this.container.removeChild(value.bubble)
+    }
+    this.points = []
+    if (this.cardAttr) {
+      this.container.removeChild(this.cardAttr)
+      this.cardAttr = void 0
+    }
+    if (this.textGroup) {
+      this.container.removeChild(this.textGroup)
+      this.textGroup = void 0
+    }
     return true
   }
 }

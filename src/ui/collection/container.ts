@@ -1,6 +1,8 @@
 import * as PIXI from 'pixi.js'
+import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
+import { kernel } from '../../kernel'
 
 interface ITexture {
   [propName: string]: PIXI.Texture
@@ -54,10 +56,36 @@ export class Collection extends PIXI.Container {
     dar: 'collection-card-dar.png'
   }
   private preferIndexes = Object.keys(this.prefer)
+  private game: Game
+  private cardContainerMove = {
+    order: false,
+    from: 0,
+    to: 0,
+    ready: false,
+    k: 0,
+    t: 40
+  }
 
-  constructor() {
+  constructor(game: Game) {
     super()
+    this.game = game
     this._load()
+  }
+
+  public render = (delta: number) => {
+    if (!this.cardContainerMove.ready) {
+      this.cardContainerMove.k += 1
+      if (this.cardContainerMove.order) {
+        this.cardContainer.y = (this.cardContainerMove.to - this.cardContainerMove.from) * (1 -
+           Math.cos(Math.PI * (this.cardContainerMove.k / this.cardContainerMove.t))
+          ) / 2 + this.cardContainerMove.from
+      }
+      if (!this.cardContainerMove.order) {
+        this.cardContainer.y = (this.cardContainerMove.to - this.cardContainerMove.from) * (1 -
+          Math.cos(Math.PI * (this.cardContainerMove.k / this.cardContainerMove.t))
+         ) / 2 + this.cardContainerMove.from
+      }
+    }
   }
 
   protected _load() {
@@ -127,6 +155,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         up.scale.x = 1
         up.scale.y = 1
+        this._switchPage(this.index - 1)
       }).on('pointerupoutside', () => {
         // route go -1
         up.scale.x = 1
@@ -145,6 +174,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         down.scale.x = 1
         down.scale.y = 1
+        this._switchPage(this.index + 1)
       }).on('pointerupoutside', () => {
         // route go -1
         down.scale.x = 1
@@ -160,12 +190,14 @@ export class Collection extends PIXI.Container {
     drawBtn.on('pointerdown', () => {
         drawBtn.texture = this.store['collection-draw-focus.png']
       }).on('pointerup', () => {
-        // route go -1
         drawBtn.texture = this.store['collection-draw.png']
+        kernel.emit('drawCardStart', {})
       }).on('pointerupoutside', () => {
         // route go -1
         drawBtn.texture = this.store['collection-draw.png']
       })
+    this.game.renderer.addTicker(this.render)
+    this.cardContainerMove.ready = true
   }
 
   protected _showCards() {
@@ -174,8 +206,12 @@ export class Collection extends PIXI.Container {
     const shadow = this.store['collection-card-shadow.png']
     const baseX = 70
     const baseY = 77
+    this.cardContainer.removeChildren()
     for (let i = 0; i < 8; i++) {
       const cardIndex = this.index * 8 + i
+      if (!this.cards[cardIndex]) {
+        break
+      }
       const x = (i % 4) * 168 + baseX
       const y = Math.floor(i / 4) * 235 + baseY
       const cardS = new PIXI.Sprite(card)
@@ -216,12 +252,40 @@ export class Collection extends PIXI.Container {
       this.cardContainer.addChild(shadowS)
       this.cardContainer.addChild(cardDemo)
       this.cardContainer.addChild(cardS)
-      this.cardContainer.addChild(preferS)
       this.cardContainer.addChild(cardIconS)
+      this.cardContainer.addChild(preferS)
       this.cardContainer.addChild(title)
       this.cardContainer.addChild(hp)
       this.cardContainer.addChild(magic)
       this.cardContainer.addChild(speed)
     }
+  }
+
+  private async _switchPage(index: number): Promise<any> {
+    if (index < 0 || index * 8 >= this.cards.length) {
+      return false
+    } else {
+      this.cardContainerMove.ready = false
+      await this._movePage(-550)
+      this.index = index
+      this._showCards()
+      await this._movePage(0)
+      this.cardContainerMove.ready = true
+    }
+  }
+
+  private async _movePage(y: number): Promise<any> {
+    const order = y - this.cardContainer.y > 0 ? true : false
+    this.cardContainerMove.k = 0
+    this.cardContainerMove.to = y
+    this.cardContainerMove.from = this.cardContainer.y
+    this.cardContainerMove.order = order
+    return new Promise((res) => {
+      setInterval(() => {
+        if (this.cardContainerMove.k > this.cardContainerMove.t) {
+          res(true)
+        }
+      })
+    })
   }
 }
