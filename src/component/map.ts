@@ -3,7 +3,7 @@ import { minusArr } from '../util'
 import * as PIXI from 'pixi.js'
 
 import { Constant, world, Chunk } from 'vaoc-map-generator'
-import { bus } from '../bus'
+import { kernel } from '../kernel'
 
 export const map = new class Map {
   public container: PIXI.Container = new PIXI.Container()
@@ -96,14 +96,15 @@ export const map = new class Map {
   }
 
   protected _register() {
-    bus.on('onMove', (chunkPos: IPosition) => {
-      if (chunkPos.x !== this._chunkPos.x ||
-          chunkPos.y !== this._chunkPos.y) {
-          bus.emit('onChunkChange', this._chunkPos, chunkPos)
+    kernel.on('onMove', async (ctx: IPosition, next) => {
+      if (ctx.x !== this._chunkPos.x ||
+          ctx.y !== this._chunkPos.y) {
+          kernel.emit('onChunkChange', { oldPos: this._chunkPos, newPos: ctx })
         }
+      await next()
     })
-    bus.on('onChunkChange', (oldPos: IPosition, newPos: IPosition) => {
-      this.chunkPos = newPos
+    kernel.on('onChunkChange', async (ctx: {oldPos: IPosition, newPos: IPosition}, next) => {
+      this.chunkPos = ctx.newPos
     })
   }
 

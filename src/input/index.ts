@@ -1,3 +1,5 @@
+import { kernel } from '../kernel'
+
 export type KeyEventType = 'keydown' | 'keyup'
 
 export const input = new class Input {

@@ -1,6 +1,6 @@
 import { ICharactor } from './character'
 import { IDisplayObject, Directions } from './sprite'
-import { bus } from '../bus'
+import { kernel } from '../kernel'
 export class Player implements ICharactor {
   public readonly type: string = 'player'
   public name: string = ''
@@ -50,8 +50,9 @@ export class Player implements ICharactor {
   }
 
   protected _register() {
-    bus.on('onPlayerMove', (dis: number, dir: Directions) => {
-      this._moveDirections(dis, dir)
+    kernel.on('onPlayerMove', async (ctx, next) => {
+      await next()
+      this._moveDirections(ctx.distance, ctx.direction)
     })
   }
 }

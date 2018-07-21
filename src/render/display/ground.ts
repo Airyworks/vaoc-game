@@ -4,7 +4,7 @@ import { Constant } from 'vaoc-map-generator'
 const CHUNK_SIDE = Constant.CHUNK_SIDE
 
 import * as Config from '../../config'
-import { bus } from '../../bus'
+import { kernel } from '../../kernel'
 import { Render } from '../render'
 
 // 单边长是 (stage - reserve)/2, 但是保证渲染连续性设置为 (stage - reserve)/2 + 2
@@ -115,13 +115,16 @@ export class Ground {
   }
 
   public render(delta: number) {
-    
+
   }
 
   protected _register() {
     this.renderer.addTicker((delta: number) => {this.render(delta)})
 
-    bus.on('onGroundMove', (distance: number, direction: Directions) => {
+    kernel.on('onGroundMove', async (ctx, next) => {
+      await next()
+      const distance: number = ctx.distance
+      const direction: Directions = ctx.direction
       // NOTICE: direction is player's direction, not ground's
       if (direction === Directions.left) {
         // this.gridsContainer.x -= distance
