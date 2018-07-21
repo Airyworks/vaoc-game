@@ -48,6 +48,30 @@ export const DIALOG_WORD_STYLE = {
   wordWrapWidth: 700
 }
 
+export const CARD_TITLE_WORD_STYLE = {
+  // fontFamily: '楷体',
+  fontSize: 12,
+  fill: ['#fff'],
+  stroke: '#333',
+  strokeThickness: 3,
+  letterSpacing: 2,
+  wordWrap: true,
+  breakWords: true,
+  wordWrapWidth: 700
+}
+
+export const CARD_ATTR_WORD_STYLE = {
+  // fontFamily: '楷体',
+  fontSize: 10,
+  fill: ['#fff'],
+  stroke: '#333',
+  strokeThickness: 2,
+  letterSpacing: 2,
+  wordWrap: true,
+  breakWords: true,
+  wordWrapWidth: 700
+}
+
 export const DIALOG_SPEED = 50 // 50 ms
 
 export const BATTLE_K = {
