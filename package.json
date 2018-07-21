@@ -46,6 +46,7 @@
     "@types/koa-compose": "^3.2.2",
     "@types/pixi.js": "^4.7.5",
     "event-emitter": "^0.3.5",
+    "koa-compose": "^4.1.0",
     "pixi-layers": "^0.1.9",
     "pixi.js": "^4.8.0",
     "ts-key-enum": "^2.0.0",

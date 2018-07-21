@@ -70,9 +70,9 @@ export class Player extends PlayerSprite implements IPosition {
     if (this.target.x - this.displayPosition.x >= distance) {
       // move to the right
       if (this.displayPosition.x + distance >= RESERVE_RIGHT) {
-        bus.emit('onGroundMove', distance, Directions.right)
+        kernel.emit('onGroundMove',{ distance, direction: Directions.right })
       } else {
-        bus.emit('onPlayerMove', distance, Directions.right)
+        kernel.emit('onPlayerMove',{ distance, direction: Directions.right })
       }
       this.absX += distance
     }
@@ -80,9 +80,9 @@ export class Player extends PlayerSprite implements IPosition {
     if (this.target.x - this.displayPosition.x <= - distance) {
       // move to the left
       if (this.displayPosition.x - distance <= RESERVE_LEFT) {
-        bus.emit('onGroundMove', distance, Directions.left)
+        kernel.emit('onGroundMove', { distance, direction: Directions.left })
       } else {
-        bus.emit('onPlayerMove', distance, Directions.left)
+        kernel.emit('onPlayerMove', { distance, direction: Directions.left })
       }
       this.absX -= distance
     }
@@ -91,9 +91,9 @@ export class Player extends PlayerSprite implements IPosition {
     if (this.target.y - this.displayPosition.y >= distance) {
       // move up
       if (this.displayPosition.y + distance >= RESERVE_TOP) {
-        bus.emit('onGroundMove', distance, Directions.up)
+        kernel.emit('onGroundMove', { distance, direction: Directions.up })
       } else {
-        bus.emit('onPlayerMove', distance, Directions.up)
+        kernel.emit('onPlayerMove', { distance, direction: Directions.up })
       }
       this.absY += distance
     }
@@ -102,9 +102,9 @@ export class Player extends PlayerSprite implements IPosition {
     if (this.target.y - this.displayPosition.y <= - distance) {
       // move down
       if (this.displayPosition.y - distance <= RESERVE_BOTTOM) {
-        bus.emit('onGroundMove', distance, Directions.down)
+        kernel.emit('onGroundMove', { distance, direction: Directions.down })
       } else {
-        bus.emit('onPlayerMove', distance, Directions.down)
+        kernel.emit('onPlayerMove', { distance, direction: Directions.down })
       }
       this.absY -= distance
     }
@@ -114,7 +114,7 @@ export class Player extends PlayerSprite implements IPosition {
       x: this.absX,
       y: this.absY
     })
-    bus.emit('onMove', chunkPos);
+    kernel.emit('onMove', chunkPos);
     ({x: this.x, y: this.y} = relPos)
   }
 

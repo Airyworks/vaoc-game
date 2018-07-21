@@ -30,7 +30,7 @@ export const kernel = new class Kernel {
     }
   }
 
-  public async emit<T>(ev: string, ctx: T, next: () => Promise<any>) {
+  public async emit<T>(ev: string, ctx: T, next?: () => Promise<any>) {
     if (!this.middlewares[ev]) {
       return Promise.resolve()
     } else {

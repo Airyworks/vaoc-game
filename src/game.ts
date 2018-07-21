@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js'
 import loader from './util/loader'
 import { Player } from './component'
 import { Render } from './render/render'
-import { Ground } from './render/display/ground';
+import { Ground } from './render/display/ground'
 
 export class Game {
   public readonly app: PIXI.Application
