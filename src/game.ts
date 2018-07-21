@@ -4,7 +4,10 @@ import loader from './util/loader'
 import { Player } from './component'
 import { Render } from './render/render'
 import { Ground } from './render/display/ground'
+import { Dialog } from './dialog'
+import { Collection } from './collection'
 import dbLoader from './database/loader'
+import { Router } from './util/route'
 import axios from 'axios'
 
 export class Game {
@@ -43,7 +46,13 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
-
+    const route = new Router(this.app.stage)
+    const dialog = new Dialog()
+    const collection = new Collection()
+    route.register('dialog', dialog)
+    route.register('collection', collection)
+    loader.loadAll()
+    route.push('collection')
   }
 
   private async initOld() {
