@@ -4,10 +4,12 @@ import loader from './util/loader'
 import { Player } from './component'
 import { Render } from './render/render'
 import { Ground } from './render/display/ground'
+import { Group } from './util/group'
 
 export class Game {
   public readonly app: PIXI.Application
   public player: Player
+  public group: Group
   public ground: Ground
   public renderer: Render
 
@@ -16,6 +18,8 @@ export class Game {
     this.app = new PIXI.Application(prop)
     this.app.stage = new PIXI.display.Stage()
     container.appendChild(this.app.view)
+
+    this.group = new Group(this.app.stage)
 
     this.renderer = new Render(this.app)
     this.player = new Player(this.renderer)
@@ -44,8 +48,8 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
-    const m1 = require('@/asset/image/m1.png')
-    const m2 = require('@/asset/image/m2.png')
+    const m1 = '/static/assets/images/m1.png'
+    const m2 = '/static/assets/images/m2.png'
 
     const containerA = new PIXI.Container()
     const containerB = new PIXI.Container()
