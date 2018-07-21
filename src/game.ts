@@ -12,6 +12,10 @@ import dbLoader from './database/loader'
 import { Router } from './util/route'
 import axios from 'axios'
 import scenario from './asset/scenario'
+import { Veb3 } from 'vaoc-veb3'
+import { VEB3_CONFIG } from './config'
+
+const veb3 = new Veb3(VEB3_CONFIG)
 
 export class Game {
   public readonly app: PIXI.Application
@@ -56,15 +60,16 @@ export class Game {
     const collection = new Collection()
     // route.register('dialog', dialog)
     route.register('collection', collection)
-    loader.loadAll()
     route.push('collection')
     // this.app.stage.addChild(collection)
     const dialog = new Dialog(this, scenario)
     dialog.show('startup')
     dialog.close()
 
-    const dorpcard = new DropCard(this)
+    const dorpcard = new DropCard(this, veb3)
     stage.addChild(dorpcard.container)
+
+    loader.loadAll()
   }
 
   private async initOld() {
