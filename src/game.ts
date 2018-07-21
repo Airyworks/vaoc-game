@@ -33,11 +33,8 @@ export class Game {
   public group: Group
   public ground: Ground
   public renderer: Render
-<<<<<<< HEAD
   public route: Router
-=======
   public name: string[] = name
->>>>>>> 8e9a720169db6cd91fb2bc8f5b5c35a068825871
 
   constructor(container: HTMLDivElement, width: number, height: number, property?: object) {
     const prop = Object.assign({ width, height, autoStart: false }, property)
