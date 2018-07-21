@@ -59,8 +59,11 @@ export class Collection extends PIXI.Container {
   private game: Game
   private cardContainerMove = {
     order: false,
-    y: 0,
-    ready: false
+    from: 0,
+    to: 0,
+    ready: false,
+    k: 0,
+    t: 40
   }
 
   constructor(game: Game) {
@@ -70,11 +73,18 @@ export class Collection extends PIXI.Container {
   }
 
   public render = (delta: number) => {
-    if (this.cardContainerMove.ready && this.cardContainerMove.order) {
-      this.cardContainer.y += delta
-    }
-    if (this.cardContainerMove.ready && !this.cardContainerMove.order) {
-      this.cardContainer.y -= delta
+    if (!this.cardContainerMove.ready) {
+      this.cardContainerMove.k += 1
+      if (this.cardContainerMove.order) {
+        this.cardContainer.y = (this.cardContainerMove.to - this.cardContainerMove.from) * (1 -
+           Math.cos(Math.PI * (this.cardContainerMove.k / this.cardContainerMove.t))
+          ) / 2 + this.cardContainerMove.from
+      }
+      if (!this.cardContainerMove.order) {
+        this.cardContainer.y = (this.cardContainerMove.to - this.cardContainerMove.from) * (1 -
+          Math.cos(Math.PI * (this.cardContainerMove.k / this.cardContainerMove.t))
+         ) / 2 + this.cardContainerMove.from
+      }
     }
   }
 
@@ -145,7 +155,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         up.scale.x = 1
         up.scale.y = 1
-        this._switchPage(this.index + 1)
+        this._switchPage(this.index - 1)
       }).on('pointerupoutside', () => {
         // route go -1
         up.scale.x = 1
@@ -164,7 +174,7 @@ export class Collection extends PIXI.Container {
         // route go -1
         down.scale.x = 1
         down.scale.y = 1
-        this._switchPage(this.index - 1)
+        this._switchPage(this.index + 1)
       }).on('pointerupoutside', () => {
         // route go -1
         down.scale.x = 1
@@ -196,8 +206,12 @@ export class Collection extends PIXI.Container {
     const shadow = this.store['collection-card-shadow.png']
     const baseX = 70
     const baseY = 77
+    this.cardContainer.removeChildren()
     for (let i = 0; i < 8; i++) {
       const cardIndex = this.index * 8 + i
+      if (!this.cards[cardIndex]) {
+        break
+      }
       const x = (i % 4) * 168 + baseX
       const y = Math.floor(i / 4) * 235 + baseY
       const cardS = new PIXI.Sprite(card)
@@ -252,8 +266,9 @@ export class Collection extends PIXI.Container {
       return false
     } else {
       this.cardContainerMove.ready = false
-      await this._movePage(-300)
-      console.log(123)
+      await this._movePage(-550)
+      this.index = index
+      this._showCards()
       await this._movePage(0)
       this.cardContainerMove.ready = true
     }
@@ -261,18 +276,16 @@ export class Collection extends PIXI.Container {
 
   private async _movePage(y: number): Promise<any> {
     const order = y - this.cardContainer.y > 0 ? true : false
-    this.cardContainerMove.y = y
+    this.cardContainerMove.k = 0
+    this.cardContainerMove.to = y
+    this.cardContainerMove.from = this.cardContainer.y
     this.cardContainerMove.order = order
-    console.log(this.cardContainerMove)
     return new Promise((res) => {
-      while (true) {
-        if (!order && this.cardContainerMove.y > this.cardContainer.y) {
+      setInterval(() => {
+        if (this.cardContainerMove.k > this.cardContainerMove.t) {
           res(true)
         }
-        if (order && this.cardContainerMove.y < this.cardContainer.y) {
-          res(true)
-        }
-      }
+      })
     })
   }
 }
