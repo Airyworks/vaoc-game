@@ -2826,8 +2826,8 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     is-extendable "^1.0.1"
 
 extend@~3.0.1:
-  version "3.0.1"
-  resolved "http://registry.npm.taobao.org/extend/download/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
+  version "3.0.2"
+  resolved "http://registry.npm.taobao.org/extend/download/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
 
 external-editor@^2.1.0:
   version "2.2.0"
@@ -4827,19 +4827,15 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-"mime-db@>= 1.34.0 < 2":
+"mime-db@>= 1.34.0 < 2", mime-db@~1.35.0:
   version "1.35.0"
   resolved "http://registry.npm.taobao.org/mime-db/download/mime-db-1.35.0.tgz#0569d657466491283709663ad379a99b90d9ab47"
 
-mime-db@~1.33.0:
-  version "1.33.0"
-  resolved "http://registry.npm.taobao.org/mime-db/download/mime-db-1.33.0.tgz#a3492050a5cb9b63450541e39d9788d2272783db"
-
 mime-types@^2.1.12, mime-types@^2.1.16, mime-types@~2.1.17, mime-types@~2.1.18:
-  version "2.1.18"
-  resolved "http://registry.npm.taobao.org/mime-types/download/mime-types-2.1.18.tgz#6f323f60a83d11146f831ff11fd66e2fe5503bb8"
+  version "2.1.19"
+  resolved "http://registry.npm.taobao.org/mime-types/download/mime-types-2.1.19.tgz#71e464537a7ef81c15f2db9d97e913fc0ff606f0"
   dependencies:
-    mime-db "~1.33.0"
+    mime-db "~1.35.0"
 
 mime@1.4.1:
   version "1.4.1"
@@ -7637,7 +7633,7 @@ validate-npm-package-license@^3.0.1:
 
 "vaoc-veb3@git+https://github.com/Airyworks/vaoc-veb3.git":
   version "1.0.0"
-  resolved "git+https://github.com/Airyworks/vaoc-veb3.git#ab08ea314d4184b7d75e7d51198fbd68e5176abd"
+  resolved "git+https://github.com/Airyworks/vaoc-veb3.git#c082139a5aea32b7fe5c7d2dfbf200579cf2a87a"
   dependencies:
     web3 "^1.0.0-beta.34"
 
