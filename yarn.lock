@@ -7633,7 +7633,7 @@ validate-npm-package-license@^3.0.1:
 
 "vaoc-veb3@git+https://github.com/Airyworks/vaoc-veb3.git":
   version "1.0.0"
-  resolved "git+https://github.com/Airyworks/vaoc-veb3.git#c082139a5aea32b7fe5c7d2dfbf200579cf2a87a"
+  resolved "git+https://github.com/Airyworks/vaoc-veb3.git#eaad6b7e190aabd326be873f7acfd5aa9727ab75"
   dependencies:
     web3 "^1.0.0-beta.34"
 
