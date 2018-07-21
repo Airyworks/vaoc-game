@@ -18,7 +18,7 @@ type IScripts = Array<{
   }>
 }>
 
-const bgImg = '/static/assets/images/dialog-bg.png'
+const bgImg = '/static/assets/scenario/images/dialog-bg.png'
 
 export class Dialog {
   public readonly game: Game
@@ -124,17 +124,21 @@ export class Dialog {
     this.game.renderer.addTicker(ticker)
   }
 
-  public show(name: string) {
+  public show(name?: string) {
     this.ready = true
-    this.currScript = this.scenario.scripts[name]
+    if (name) {
+      this.currScript = this.scenario.scripts[name]
+    } else {
+      // do nothing
+    }
     this.execScript()
   }
 
   protected _init() {
-    this.graphics.zIndex = 10
-    this.graphics.beginFill(0x333333)
-    this.graphics.drawRect(0, 0, 800, 600)
-    this.container.addChild(this.graphics)
+    // this.graphics.zIndex = 10
+    // this.graphics.beginFill(0x333333)
+    // this.graphics.drawRect(0, 0, 800, 600)
+    // this.container.addChild(this.graphics)
     this.bg.zIndex = 2
     this.bg.position.y = 300
     this.bg.position.x = 0

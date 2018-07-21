@@ -4,9 +4,13 @@ import loader from './util/loader'
 import { Player } from './component'
 import { Render } from './render/render'
 import { Ground } from './render/display/ground'
+import { Dialog } from './ui/dialog'
+import { Collection } from './ui/collection'
 import { Group } from './util/group'
 import dbLoader from './database/loader'
+import { Router } from './util/route'
 import axios from 'axios'
+import scenario from './asset/scenario'
 
 export class Game {
   public readonly app: PIXI.Application
@@ -47,7 +51,16 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
-
+    const route = new Router(this.app.stage)
+    const collection = new Collection()
+    // route.register('dialog', dialog)
+    route.register('collection', collection)
+    loader.loadAll()
+    route.push('collection')
+    // this.app.stage.addChild(collection)
+    const dialog = new Dialog(this, scenario)
+    dialog.show('startup')
+    dialog.close()
   }
 
   private async initOld() {

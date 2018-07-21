@@ -8,7 +8,15 @@ type LoaderCallBack = (
   rs: PIXIResource
 ) => any
 
+interface ILoad {
+  filename: string | string[] | any,
+  name?: string,
+  cb?: LoaderCallBack
+}
+
 export default new (class Loader {
+  private toloadArr: ILoad[] = []
+
   public async load(filename: string, cb?: LoaderCallBack): Promise<any>
   public async load(filename: string[], cb?: LoaderCallBack): Promise<any>
   public async load(filename: string, name: string, cb?: LoaderCallBack): Promise<any>
@@ -71,4 +79,33 @@ export default new (class Loader {
   // public loadGesture(file: string): Promise<any> {
 
   // }
+
+  public toload(filename: string, cb?: LoaderCallBack): undefined
+  public toload(filename: string[], cb?: LoaderCallBack): undefined
+  public toload(filename: string, name: string, cb?: LoaderCallBack): undefined
+  public toload(filename: any, name?: any, cb?: LoaderCallBack): any {
+    if (!cb) {
+      if (name) {
+        this.toloadArr.push({filename, name})
+      } else {
+        this.toloadArr.push({filename})
+      }
+    } else {
+      if (name) {
+        this.toloadArr.push({filename, name, cb})
+      } else {
+        this.toloadArr.push({filename, cb})
+      }
+    }
+  }
+
+  public async loadAll() {
+    for (const arg of this.toloadArr) {
+      if (arg.name) {
+        const res = await this.load(arg.filename, arg.name, arg.cb)
+      } else {
+        const res = await this.load(arg.filename, arg.cb)
+      }
+    }
+  }
 })()
