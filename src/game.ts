@@ -20,6 +20,11 @@ import { Battle } from './component/battle'
 import { Character } from './component/battle/character'
 import { Character as Char } from './ui/battleground/character'
 
+const name = [
+  'Sumire', 'Shizuki', 'Hana', 'Harune', 'Hiyori', 'Kana', 'kanami', 'kotone',
+  'Nozomi', 'Mihari', 'Mei', 'Momoka', 'Rin', 'Wakana', 'Ayaka', 'Aruba',
+]
+
 const veb3 = new Veb3(VEB3_CONFIG)
 
 export class Game {
@@ -28,7 +33,11 @@ export class Game {
   public group: Group
   public ground: Ground
   public renderer: Render
+<<<<<<< HEAD
   public route: Router
+=======
+  public name: string[] = name
+>>>>>>> 8e9a720169db6cd91fb2bc8f5b5c35a068825871
 
   constructor(container: HTMLDivElement, width: number, height: number, property?: object) {
     const prop = Object.assign({ width, height, autoStart: false }, property)
@@ -63,20 +72,83 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
+<<<<<<< HEAD
     this.route = new Router(this.app.stage)
     const battleground = new Battleground(this)
     const hello = new Hello(this)
     const collection = new Collection(this)
+=======
+    const route = new Router(this.app.stage)
+    const collection = new Collection(this, veb3)
+>>>>>>> 8e9a720169db6cd91fb2bc8f5b5c35a068825871
     // route.register('dialog', dialog)
     this.route.register('hello', hello)
     this.route.register('collection', collection)
     this.route.register('battleground', battleground)
     this.route.push('hello')
     // this.app.stage.addChild(collection)
-    const dialog = new Dialog(this, scenario)
+    // const dialog = new Dialog(this, scenario)
     // dialog.show('startup')
     // dialog.close()
 
+<<<<<<< HEAD
+=======
+    const bt: Battle = new Battle([
+      new Character({ HP: 3500,
+        MP: 355,
+        ATK: 250,
+        DEF: 125,
+        SPD: 200,
+        MAIN: 'wat',
+        MAINP: 182,
+        NAME: '王跻欣01' }),
+      new Character({ HP: 5500,
+        MP: 285,
+        ATK: 180,
+        DEF: 115,
+        SPD: 250,
+        MAIN: 'spa',
+        MAINP: 230,
+        NAME: '王跻欣02' }),
+      new Character({ HP: 4500,
+        MP: 305,
+        ATK: 210,
+        DEF: 55,
+        SPD: 140,
+        MAIN: 'lig',
+        MAINP: 200,
+        NAME: '王跻欣03' })
+    ], [
+    new Character({ HP: 3500,
+      MP: 355,
+      ATK: 250,
+      DEF: 125,
+      SPD: 200,
+      MAIN: 'fir',
+      MAINP: 182,
+      NAME: '王大夫01' }),
+    new Character({ HP: 5500,
+      MP: 285,
+      ATK: 180,
+      DEF: 115,
+      SPD: 250,
+      MAIN: 'wid',
+      MAINP: 230,
+      NAME: '王大夫02' }),
+    new Character({ HP: 4500,
+      MP: 305,
+      ATK: 210,
+      DEF: 55,
+      SPD: 140,
+      MAIN: 'dar',
+      MAINP: 200,
+      NAME: '王大夫03' })
+    ])
+    while (!bt.next()) {
+      //
+    }
+
+>>>>>>> 8e9a720169db6cd91fb2bc8f5b5c35a068825871
     const dorpcard = new DropCard(this, veb3)
     stage.addChild(dorpcard.container)
 
