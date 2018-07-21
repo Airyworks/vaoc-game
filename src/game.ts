@@ -5,6 +5,7 @@ import { Player } from './component'
 import { Render } from './render/render'
 import { Ground } from './render/display/ground'
 import { Dialog } from './ui/dialog'
+import { DropCard } from './ui/draw'
 import { Collection } from './ui/collection'
 import { Group } from './util/group'
 import dbLoader from './database/loader'
@@ -61,6 +62,9 @@ export class Game {
     const dialog = new Dialog(this, scenario)
     dialog.show('startup')
     dialog.close()
+
+    const dorpcard = new DropCard(this)
+    stage.addChild(dorpcard.container)
   }
 
   private async initOld() {
