@@ -15,6 +15,11 @@ import scenario from './asset/scenario'
 import { Veb3 } from 'vaoc-veb3'
 import { VEB3_CONFIG } from './config'
 
+const name = [
+  'Sumire', 'Shizuki', 'Hana', 'Harune', 'Hiyori', 'Kana', 'kanami', 'kotone',
+  'Nozomi', 'Mihari', 'Mei', 'Momoka', 'Rin', 'Wakana', 'Ayaka', 'Aruba',
+]
+
 const veb3 = new Veb3(VEB3_CONFIG)
 
 export class Game {
@@ -23,6 +28,7 @@ export class Game {
   public group: Group
   public ground: Ground
   public renderer: Render
+  public name: string[] = name
 
   constructor(container: HTMLDivElement, width: number, height: number, property?: object) {
     const prop = Object.assign({ width, height, autoStart: false }, property)
@@ -57,12 +63,12 @@ export class Game {
     stage.group.enableSort = true
 
     const route = new Router(this.app.stage)
-    const collection = new Collection(this)
+    const collection = new Collection(this, veb3)
     // route.register('dialog', dialog)
     route.register('collection', collection)
     route.push('collection')
     // this.app.stage.addChild(collection)
-    const dialog = new Dialog(this, scenario)
+    // const dialog = new Dialog(this, scenario)
     // dialog.show('startup')
     // dialog.close()
 

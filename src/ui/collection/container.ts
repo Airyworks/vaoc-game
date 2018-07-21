@@ -3,7 +3,10 @@ import { Game } from '../../game'
 import loader from '../../util/loader'
 import { CARD_TITLE_WORD_STYLE, CARD_ATTR_WORD_STYLE } from '../../config'
 import { kernel } from '../../kernel'
+import { Veb3 } from 'vaoc-veb3'
+import axios from 'axios'
 
+type MHSJAttributes = 'wat' | 'fir' | 'wid' | 'soi' | 'ele' | 'lig' | 'dar' | 'tim' | 'spa'
 interface ITexture {
   [propName: string]: PIXI.Texture
 }
@@ -14,9 +17,12 @@ interface IPrefer {
 
 interface ICard {
   name: string,
+  id: string,
   hp: number,
   magic: number,
-  speed: number
+  speed: number,
+  main: MHSJAttributes | 'none',
+  img: PIXI.Sprite
 }
 
 const cardTitleStyle = new PIXI.TextStyle(CARD_TITLE_WORD_STYLE)
@@ -24,23 +30,7 @@ const cardAttrStyle = new PIXI.TextStyle(CARD_ATTR_WORD_STYLE)
 
 export class Collection extends PIXI.Container {
   private store: ITexture = {}
-  private cards: ICard[] = [
-    { name: 'WJX', hp: 10, magic: 15, speed: 11 },
-    { name: 'WJX', hp: 15, magic: 10, speed: 12 },
-    { name: 'WJX', hp: 12, magic: 15, speed: 13 },
-    { name: 'WJX', hp: 14, magic: 25, speed: 15 },
-    { name: 'WJX', hp: 10, magic: 11, speed: 16 },
-    { name: 'WJX', hp: 10, magic: 15, speed: 15 },
-    { name: 'WJX', hp: 10, magic: 15, speed: 15 },
-    { name: 'WJX', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 },
-    { name: 'Minako', hp: 10, magic: 15, speed: 15 }
-  ]
+  private cards: ICard[] = []
   private index = 0
   private cardContainer = new PIXI.Container()
   private prefer: IPrefer = {
@@ -57,6 +47,7 @@ export class Collection extends PIXI.Container {
   }
   private preferIndexes = Object.keys(this.prefer)
   private game: Game
+  private veb3: Veb3
   private cardContainerMove = {
     order: false,
     from: 0,
@@ -66,9 +57,10 @@ export class Collection extends PIXI.Container {
     t: 40
   }
 
-  constructor(game: Game) {
+  constructor(game: Game, veb3: Veb3) {
     super()
     this.game = game
+    this.veb3 = veb3
     this._load()
   }
 
@@ -95,7 +87,9 @@ export class Collection extends PIXI.Container {
       for (const frame of Object.keys(frames)) {
         this.store[frame] = PIXI.Texture.fromFrame(frame)
       }
-      this._init()
+      this._initData().then((res) => {
+        this._init()
+      })
     })
   }
 
@@ -217,8 +211,8 @@ export class Collection extends PIXI.Container {
       const cardS = new PIXI.Sprite(card)
       const cardIconS = new PIXI.Sprite(cardIcon)
       const shadowS = new PIXI.Sprite(shadow)
-      const preferIndex: string = this.preferIndexes[Math.floor(Math.random() * this.preferIndexes.length)]
-      const preferS = new PIXI.Sprite(this.store[this.prefer[preferIndex]])
+      // const preferIndex: string = this.preferIndexes[Math.floor(Math.random() * this.preferIndexes.length)]
+      const preferS = new PIXI.Sprite(this.store[this.prefer[this.cards[cardIndex].main]])
       const title = new PIXI.Text(this.cards[cardIndex].name, cardTitleStyle)
       const hp = new PIXI.Text(this.cards[cardIndex].hp.toString(), cardAttrStyle)
       const magic = new PIXI.Text(this.cards[cardIndex].magic.toString(), cardAttrStyle)
@@ -242,7 +236,8 @@ export class Collection extends PIXI.Container {
       magic.y = y + 155
       speed.y = y + 170
 
-      const cardDemo = new PIXI.Sprite(this.store['collection-card-demo.png'])
+      // const cardDemo = new PIXI.Sprite(this.store['collection-card-demo.png'])
+      const cardDemo = this.cards[cardIndex].img
       cardDemo.anchor.set(0.5)
       cardDemo.x = x + 73
       cardDemo.y = y + 80
@@ -259,6 +254,37 @@ export class Collection extends PIXI.Container {
       this.cardContainer.addChild(magic)
       this.cardContainer.addChild(speed)
     }
+  }
+
+  private async _initData() {
+    const count = await this.veb3.getMahouShoujoCount()
+    const end = Math.min(30, count)
+    const list = await this.veb3.getMahouShoujoList(1, end)
+    this.cards = list.map((item) => {
+      const hash = this.veb3.web3.utils.toHex(item).substr(2).padStart(64, '0')
+      const attr = this.veb3.parseAttribute(item)
+      return {
+        name: this.game.name[parseInt(hash.substr(52, 1), 16)],
+        id: hash,
+        hp: attr.HP,
+        magic: attr.MgA,
+        speed: attr.SP,
+        main: attr.main,
+        img: new PIXI.Sprite(this.store['collection-card-demo.png'])
+      }
+    })
+    for (const card of this.cards) {
+      axios.post('http://localhost:15000/api/v1/fakegen', {
+        hash: card.id
+      }).then((res) => {
+        if (res.status === 200) {
+          card.img = PIXI.Sprite.fromImage('data:image/png;base64,' + res.data)
+          card.img.scale.set(2)
+          this._showCards()
+        }
+      })
+    }
+    return this.cards
   }
 
   private async _switchPage(index: number): Promise<any> {

@@ -150,7 +150,7 @@ export class DropCard {
           this.headLayer.addChild(this.headImage)
         }
         this.cardData = {
-          name: 'RUA',
+          name: this.game.name[parseInt(hash.substr(52, 1), 16)],
           HP: attr.HP,
           MgA: attr.MgA,
           SP: attr.SP,
