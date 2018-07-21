@@ -6,6 +6,7 @@ import { Render } from './render/render'
 import { Ground } from './render/display/ground'
 import { Dialog } from './ui/dialog'
 import { DropCard } from './ui/draw'
+import { Hello } from './ui/hello'
 import { Collection } from './ui/collection'
 import { Group } from './util/group'
 import dbLoader from './database/loader'
@@ -23,6 +24,7 @@ export class Game {
   public group: Group
   public ground: Ground
   public renderer: Render
+  public route: Router
 
   constructor(container: HTMLDivElement, width: number, height: number, property?: object) {
     const prop = Object.assign({ width, height, autoStart: false }, property)
@@ -35,6 +37,7 @@ export class Game {
     this.renderer = new Render(this.app)
     this.player = new Player(this.renderer)
     this.ground = new Ground(this.renderer)
+    this.route = new Router(this.app.stage)
   }
 
   public start() {
@@ -56,11 +59,13 @@ export class Game {
     const stage = this.app.stage as any
     stage.group.enableSort = true
 
-    const route = new Router(this.app.stage)
+    this.route = new Router(this.app.stage)
+    const hello = new Hello(this)
     const collection = new Collection(this)
     // route.register('dialog', dialog)
-    route.register('collection', collection)
-    route.push('collection')
+    this.route.register('hello', hello)
+    this.route.register('collection', collection)
+    this.route.push('hello')
     // this.app.stage.addChild(collection)
     const dialog = new Dialog(this, scenario)
     // dialog.show('startup')
