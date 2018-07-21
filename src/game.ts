@@ -5,6 +5,8 @@ import { Player } from './component'
 import { Render } from './render/render'
 import { Ground } from './render/display/ground'
 import { Group } from './util/group'
+import dbLoader from './database/loader'
+import axios from 'axios'
 
 export class Game {
   public readonly app: PIXI.Application
@@ -41,6 +43,14 @@ export class Game {
   }
 
   private async init() {
+    this.app.stage = new PIXI.display.Stage()
+    const stage = this.app.stage as any
+    stage.group.enableSort = true
+
+
+  }
+
+  private async initOld() {
     // const v = new Veb3()
     // await v.createNewMahouShoujo()
 
@@ -50,6 +60,12 @@ export class Game {
 
     const m1 = '/static/assets/images/m1.png'
     const m2 = '/static/assets/images/m2.png'
+    const m3 = '/static/assets/kuro-sprite.png'
+    const m3Json = (await axios.get('/static/assets/kuro-sprite.json')).data
+    console.log(m3Json)
+
+    const rpgResources = await dbLoader.loadRPGMaker('/static/assets/rpg-maker-mv')
+    console.log(rpgResources)
 
     const containerA = new PIXI.Container()
     const containerB = new PIXI.Container()
@@ -59,28 +75,37 @@ export class Game {
 
     const sprites = await loader.load([m1, m2])
 
-    const sp1: PIXI.Sprite = sprites[m1]
-    const sp1s = []
-    const sp2s = []
-    for (let i = 0; i < 10; i++) {
-      sp1s[i] = loader.copyTexture(sp1)
-      sp1s[i].position.set(i * 20, i * 10)
-      sp1s[i].scale.set(0.2, 0.2)
-      sp1s[i].zOrder = -i
-      containerA.addChild(sp1s[i])
-      sp1s[i].parentGroup = groupA
-    }
-    const sp2: PIXI.Sprite = sprites[m2]
-    for (let i = 0; i < 10; i++) {
-      sp2s[i] = loader.copyTexture(sp2)
-      sp2s[i].position.set((i + 10) * 18,  200 - i * 12)
-      sp2s[i].scale.set(0.2, 0.2)
-      sp2s[i].zOrder = i
-      containerB.addChild(sp2s[i])
-      sp2s[i].parentGroup = groupB
-    }
+    // load sprite from object
+    const aaa = new Image()
+    aaa.src = m3
+    const kuroSprites = new PIXI.BaseTexture(aaa, undefined, 1)
+    const spritesheet = new PIXI.Spritesheet(kuroSprites, m3Json)
+    spritesheet.parse((textures) => {
+      // console.log('parsed textures', textures)
+    })
 
-    containerA.position.set(60, 60)
+    const sp3s = []
+    // for (let i = 0; i < 11; i++) {
+    //   console.log(PIXI.loader.resources['KURO-D-1.png'])
+    // }
+
+
+    const graphicsA = new PIXI.Graphics()
+    graphicsA.lineStyle(2, 0xFF00FF, 1)
+    graphicsA.beginFill(0xFF00BB, 0.25)
+    graphicsA.drawRoundedRect(0, 0, 800, 600, 15)
+    graphicsA.endFill()
+
+    const graphicsB = new PIXI.Graphics()
+    graphicsB.lineStyle(2, 0xFFFF00, 1)
+    graphicsB.beginFill(0xFFBB00, 0.25)
+    graphicsB.drawRoundedRect(0, 0, 800, 600, 15)
+    graphicsB.endFill()
+
+    containerA.addChild(graphicsA)
+    containerB.addChild(graphicsB)
+
+    // containerA.position.set(60, 60)
 
     this.app.stage.addChild(containerA)
     this.app.stage.addChild(containerB)
