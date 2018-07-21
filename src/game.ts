@@ -15,6 +15,10 @@ import axios from 'axios'
 import scenario from './asset/scenario'
 import { Veb3 } from 'vaoc-veb3'
 import { VEB3_CONFIG } from './config'
+import { Battleground } from './ui/battleground'
+import { Battle } from './component/battle'
+import { Character } from './component/battle/character'
+import { Character as Char } from './ui/battleground/character'
 
 const veb3 = new Veb3(VEB3_CONFIG)
 
@@ -60,11 +64,13 @@ export class Game {
     stage.group.enableSort = true
 
     this.route = new Router(this.app.stage)
+    const battleground = new Battleground(this)
     const hello = new Hello(this)
     const collection = new Collection(this)
     // route.register('dialog', dialog)
     this.route.register('hello', hello)
     this.route.register('collection', collection)
+    this.route.register('battleground', battleground)
     this.route.push('hello')
     // this.app.stage.addChild(collection)
     const dialog = new Dialog(this, scenario)
