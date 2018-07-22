@@ -2,7 +2,7 @@ import { Character } from './character'
 import * as seedrandom from 'seedrandom'
 import { BATTLE_K, BATTLE_L, BATTLE_MAX_MAG, BATTLE_CRITICAL} from '../../config'
 
-const logger = console.log
+// const logger = console.log
 
 function findCharLevel(ch: Character) {
   switch (ch.MAIN) {
@@ -148,6 +148,7 @@ export class Battle {
   public rdg: () => number
   public isEnd: boolean = false
   public isWin: boolean = false
+  public logger = console.log
 
   constructor(self: Character[], oppo: Character[], seed?: string) {
     this.self = self
@@ -171,8 +172,8 @@ export class Battle {
     const filtered = attackedSet.filter((v) => v.curHP > 0)
     const attCard = filtered[Math.floor(this.rdg() * filtered.length)]
 
-    if (logger) {
-      logger(`${min.NAME} 对 ${attCard.NAME} 发动了攻击 !`)
+    if (this.logger) {
+      this.logger(`${min.NAME} 对 ${attCard.NAME} 发动了攻击 !`)
     }
 
     this._battle(min, attCard)
@@ -180,15 +181,15 @@ export class Battle {
     if (this._isEnd()) {
       this.isEnd = true
       if (this._isWin()) {
-        if (logger) {
-          logger(`对方卡牌全部被破坏!`)
-          logger(`胜利!`)
+        if (this.logger) {
+          this.logger(`对方卡牌全部被破坏!`)
+          this.logger(`胜利!`)
         }
         this.isWin = true
       } else {
-        if (logger) {
-          logger(`你的卡牌全部被破坏!`)
-          logger(`失败!`)
+        if (this.logger) {
+          this.logger(`你的卡牌全部被破坏!`)
+          this.logger(`失败!`)
         }
         this.isWin = false
       }
@@ -224,19 +225,19 @@ export class Battle {
 
   protected _battle(a: Character, b: Character) {
     const useCritical = a.curMP >= BATTLE_MAX_MAG
-    if (useCritical && logger) {
-      logger(`${a.NAME} 对 ${b.NAME} 的攻击触发了暴击!`)
+    if (useCritical && this.logger) {
+      this.logger(`${a.NAME} 对 ${b.NAME} 的攻击触发了暴击!`)
     }
 
     // battle
     const dmg = damage(a, b, useCritical)
     b.curHP = Math.max(0, b.curHP - dmg)
 
-    if (logger) {
-      logger(`${a.NAME} 对 ${b.NAME} 的攻击造成了 ${dmg} 点伤害`)
-      logger(`${b.NAME} 还剩 ${b.curHP} 点生命值`)
+    if (this.logger) {
+      this.logger(`${a.NAME} 对 ${b.NAME} 的攻击造成了 ${dmg} 点伤害`)
+      this.logger(`${b.NAME} 还剩 ${b.curHP} 点生命值`)
       if (b.curHP <= 0) {
-        logger(`${b.NAME} 生命值耗光, 被破坏`)
+        this.logger(`${b.NAME} 生命值耗光, 被破坏`)
       }
     }
 
