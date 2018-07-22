@@ -52,9 +52,8 @@ export class Battleground extends PIXI.Container {
     bg.y = 0
     this.addChild(bg)
 
-
     const bt = [[
-      new Character({ HP: 3500,
+      new Character({ HP: 2500,
         hash: "",
         MP: 355,
         ATK: 250,
@@ -63,7 +62,7 @@ export class Battleground extends PIXI.Container {
         MAIN: 'wat',
         MAINP: 182,
         NAME: '王跻欣01' }),
-      new Character({ HP: 5500,
+      new Character({ HP: 1100,
         hash: "",
         MP: 285,
         ATK: 180,
@@ -72,7 +71,7 @@ export class Battleground extends PIXI.Container {
         MAIN: 'spa',
         MAINP: 230,
         NAME: '王跻欣02' }),
-      new Character({ HP: 4500,
+      new Character({ HP: 900,
         hash: "",
         MP: 305,
         ATK: 210,
@@ -81,7 +80,7 @@ export class Battleground extends PIXI.Container {
         MAIN: 'lig',
         MAINP: 200,
         NAME: '王跻欣03' }),
-      new Character({ HP: 4500,
+      new Character({ HP: 1600,
         hash: "",
         MP: 305,
         ATK: 210,
@@ -90,7 +89,7 @@ export class Battleground extends PIXI.Container {
         MAIN: 'lig',
         MAINP: 200,
         NAME: '王跻欣04' }),
-      new Character({ HP: 4500,
+      new Character({ HP: 1500,
         hash: "",
         MP: 305,
         ATK: 210,
@@ -100,7 +99,7 @@ export class Battleground extends PIXI.Container {
         MAINP: 200,
         NAME: '王跻欣05' })
     ], [
-    new Character({ HP: 3500,
+    new Character({ HP: 1400,
       hash: "",
       MP: 355,
       ATK: 250,
@@ -109,7 +108,7 @@ export class Battleground extends PIXI.Container {
       MAIN: 'fir',
       MAINP: 182,
       NAME: '王大夫01' }),
-    new Character({ HP: 5500,
+    new Character({ HP: 1500,
       hash: "",
       MP: 285,
       ATK: 180,
@@ -118,7 +117,7 @@ export class Battleground extends PIXI.Container {
       MAIN: 'wid',
       MAINP: 230,
       NAME: '王大夫02' }),
-      new Character({ HP: 4500,
+      new Character({ HP: 1500,
         hash: "",
         MP: 305,
         ATK: 210,
@@ -127,7 +126,7 @@ export class Battleground extends PIXI.Container {
         MAIN: 'dar',
         MAINP: 200,
         NAME: '王大夫03' }),
-      new Character({ HP: 4500,
+      new Character({ HP: 1500,
         hash: "",
         MP: 305,
         ATK: 210,
@@ -136,7 +135,7 @@ export class Battleground extends PIXI.Container {
         MAIN: 'dar',
         MAINP: 200,
         NAME: '王大夫04' }),
-      new Character({ HP: 4500,
+      new Character({ HP: 1500,
         hash: "",
         MP: 305,
         ATK: 210,
@@ -148,6 +147,62 @@ export class Battleground extends PIXI.Container {
       ]]
 
     this.newBattle(bt[0].map((v) => new Char(v)), bt[1].map((v) => new Char(v)))
+
+
+    const vs = new PIXI.Sprite(this.store['battle-vs.png'])
+    vs.anchor.set(0.5)
+    vs.x = 400
+    vs.y = 280
+    vs.interactive = true
+    vs.buttonMode = true
+    this.addChild(vs)
+    vs.on('pointerdown', () => {
+        vs.scale.x = 1.2
+        vs.scale.y = 1.2
+      }).on('pointerup', () => {
+        // route go -1
+        vs.scale.x = 1
+        vs.scale.y = 1
+        const self = this;
+        (function() {
+          const textContainer = document.createElement('div')
+          document.body.appendChild(textContainer)
+          textContainer.style.position = 'absolute'
+          textContainer.style.left = '0'
+          textContainer.style.right = '0'
+          // textContainer.style.top = '0'
+          textContainer.style.bottom = '30%'
+          textContainer.style.textAlign = 'center'
+          textContainer.style.color = '#fff'
+          textContainer.style.fontSize = '20px'
+          textContainer.style.textShadow = '#000 1px 1px'
+          textContainer.innerHTML += '比赛开始！'
+          textContainer.innerHTML += '<br>'
+          textContainer.innerHTML += '--------------------------'
+          function log(s: string) {
+            textContainer.innerHTML += '<br>'
+            textContainer.innerHTML += s
+          }
+          self.battle.logger = log
+          doBattle()
+          function doBattle() {
+            if (!self.battle.next()) {
+              console.log('aaaaaa')
+              setTimeout(doBattle, 500)
+            } else {
+              setTimeout(() => {
+                textContainer.innerHTML = ''
+                self.game.route.push('hello')
+              }, 5000)
+            }
+          }
+        })()
+      }).on('pointerupoutside', () => {
+        // route go -1
+        vs.scale.x = 1
+        vs.scale.y = 1
+      })
+    this.addChild(vs)
   }
 
   private _renderAvatar(side: 'self' | 'opponent') {
