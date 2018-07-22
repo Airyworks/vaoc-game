@@ -19,7 +19,8 @@ export class Hello extends PIXI.Container {
   }
 
   public render = (delta: number) => {
-    const step = 1 + Math.floor(Math.random() * 3);
+    // const step = 1 + Math.floor(Math.random() * 3);
+    const step = 2;
     [this.bg1, this.bg2].forEach((element) => {
       element.x -= step
       if (element.x < -1200) {
